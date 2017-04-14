@@ -1,0 +1,31 @@
+{
+  "name": "kowebpart",
+  "version": "1.0.0",
+  "description": "knockout webpart",
+  "main": "build/server.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "author": "Joe McShea",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/knockout": "3.4.39",
+    "@types/sharepoint": "2013.0.31",
+    "awesome-typescript-loader": "3.0.0-beta.18",
+    "css-loader": "0.26.1",
+    "file-loader": "0.10.0",
+    "node-sass": "4.5.0",
+    "path": "0.12.7",
+    "postcss-loader": "1.2.2",
+    "sass-loader": "4.1.1",
+    "style-loader": "0.13.1",
+    "tslint": "^5.1.0",
+    "tslint-loader": "^3.5.2",
+    "typescript": "2.1.5",
+    "url-loader": "0.5.7",
+    "webpack": "2.2.1"
+  },
+  "dependencies": {
+    "knockout": "3.4.1"
+  }
+}

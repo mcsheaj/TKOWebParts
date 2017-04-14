@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<!--
+    Export any web part from a SharePoint page - https://chuvash.eu/2014/09/19/export-any-web-part-from-a-sharepoint-page/ by Anatoly Mironov
+    -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Creating a CSS3 Slider</title>
+</head>
+
+<body>
+
+    <div id="slider" class="slider">
+        <div class="slider-wrapper" data-bind='foreach: images'>
+            <div class="slide">
+                <img data-bind='attr: { src: Url, alt: Title, "data-slide": $index() }' />
+                <p class="caption" data-bind='text: Title'></p>
+            </div>
+        </div>
+    </div>
+    <div class="slider-nav" data-bind='foreach: { data: images, afterRender: applySlider }'>
+        <a href="#" data-bind='attr: { "data-slide": $index() }'></a>
+    </div>
+    <div class="slider-menu" data-bind='visible: $root.images().length > 0' style="display:none;">
+        <span data-bind='click: $root.toggleDialog.bind($root, ".addSliderImages")' class="slider-button ms-cui-img-16by16 ms-cui-img-cont-float" unselectable="on">
+            <img style="left: -37px; top: -53px;" alt="Upload Images" title="Upload Images" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
+        </span>
+        <span data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' class="slider-button ms-cui-img-16by16 ms-cui-img-cont-float" unselectable="on">
+            <img style="left: -272px; top: -72px;" alt="Edit Image" title="Edit Image" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
+        </span>
+        <span data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' class="slider-button ms-cui-img-16by16 ms-cui-img-cont-float" unselectable="on">
+            <img style="left: -109px; top: -289px;" alt="Delete Image" title="Delete Image" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
+        </span>
+    </div>
+    <div class="addSliderImages" style="display:none">
+        <div>
+            <div class="dragandrophandler">
+                <div class="draganddropbusy" style="display:none"><img src="/sites/csrdemos/_layouts/images/progress.gif"></div>
+                <div class="draganddroplabel">Drag & Drop Images To Add</div>
+            </div>
+        </div>
+    </div>
+    <div class="editSliderImage modalDialog" style="display:none">
+        <div>
+            <a data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' href="#" title="Close" class="close">X</a>
+            <h2>Edit Image</h2>
+            <span class="sliderFormLabel">Title</span><input data-bind="value: selected().Title" type="text" class="titleInput" /><br />
+            <span class="sliderFormLabel">Description</span><textarea rows="10" cols="45" data-bind="value: selected().Description" class="descriptionInput"></textarea><br />
+            <button type="button" data-bind='click: updateImage' class="sliderButton editSave">Ok</button>
+            <button type="button" data-bind='click: resetImage' class="sliderButton editReset">Cancel</button>
+        </div>
+    </div>
+    <div class="deleteSliderImage modalDialog" style="display:none">
+        <div>
+            <a data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' href="#" title="Close" class="close">X</a>
+            <h2>Delete Confirmation</h2>
+            <p>Are you sure you want to delete the current image?</p>
+            <button type="button" data-bind='click: deleteImage' class="sliderButton delete">Delete</button>
+        </div>
+    </div>
+    <script type='text/javascript' 
+        src='/Style Library/tkoWebPart/pnp-ww.js' 
+        ww-appname='ImageSlider' 
+        ww-appbind='tkoWebPart.imageSlider.init'
+        ww-appConfig='{"listTitle": "Pictures"}' 
+        ww-appscripts='[{"src": "/Style Library/tkoWebPart/tkoWebPart.js", "priority":0}]'>
+    </script>
+
+</body>
+
+</html>
