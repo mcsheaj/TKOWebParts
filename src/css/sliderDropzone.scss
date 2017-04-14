@@ -1,0 +1,18 @@
+.dragandrophandler {
+    border: 2px dotted #0B85A1;
+    width: 800px;
+    height: 200px;
+    color: #92AAB0;
+    margin: 0 auto 10px auto;
+    font-size: 2em;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 200px;
+    background-color: rgba(11, 133, 161, .1);
+
+    &.dragandrophandler.dragover {
+        border: 2px solid rgba(11, 133, 161, 1);
+        background-color: rgba(11, 133, 161, .3);
+    }
+}
+
