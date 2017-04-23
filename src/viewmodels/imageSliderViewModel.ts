@@ -4,7 +4,6 @@ import '../css/sliderDialog.scss';
 import '../css/sliderDropzone.scss';
 
 import * as ko from "knockout";
-import { ajax, Options } from '../utils/ajax';
 import { ImageService } from '../api/imageService';
 import { Slider } from '../utils/slider';
 import { FileDropzone, CompleteCallback } from '../utils/fileDropzone';
@@ -81,24 +80,25 @@ export class ImageSliderViewModel {
     Create a new image in the source library from data passed from the drop
     zone, and add it to the model.
     */
-    createImage = (filename: string,
-        buffer: any,
-        complete: CompleteCallback): void => {
+    createImage = (filename: string, buffer: any, complete: CompleteCallback): void => {
         this.service.createImage(filename,
             buffer,
-            (json: any) =>{
-                // construct the new image
-                let image = <Image>{
-                    Url: ko.observable(_spPageContextInfo.webServerRelativeUrl +
-                        this.config.listTitle + "/" + filename),
-                    Title: ko.observable(""),
-                    Description: ko.observable(""),
-                    FileRef: _spPageContextInfo.webServerRelativeUrl +
-                    this.config.listTitle + "/" + filename
-                };
+            (json: any) => {
+                if(json.d.TimeCreated === json.d.TimeLastModified) {
+                    // construct the new image
+                    let image = <Image>{
+                        Id: json.d.ListItemAllFields.Id,
+                        Url: ko.observable(_spPageContextInfo.webServerRelativeUrl +
+                            this.config.listTitle + "/" + filename),
+                        Title: ko.observable(""),
+                        Description: ko.observable(""),
+                        FileRef: _spPageContextInfo.webServerRelativeUrl +
+                        this.config.listTitle + "/" + filename
+                    };
 
-                // push it to the array
-                this.images.push(image);
+                    // push it to the array
+                    this.images.push(image);
+                }
 
                 // tell the drop zone we're finished
                 complete();
@@ -198,11 +198,10 @@ export class ImageSliderViewModel {
             this.selected(this.images()[index]);
         }
         if (dialog.className.indexOf("show") < 0) {
-            dialog.className = dialog.className + " show";
+            dialog.classList.add("show");
         }
         else {
-            let expression = new RegExp(" show", "g");
-            dialog.className = dialog.className.replace(expression, "");
+            dialog.classList.remove("show");
         }
     }
 }
