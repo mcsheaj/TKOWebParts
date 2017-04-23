@@ -53,7 +53,17 @@ export class Slider {
         caption.classList.add("visible");
     }
 
-    setCurrentLink(link: Element) : void {
+    setCurrentLink(link: Element) : void;
+    setCurrentLink(index: number) : void;
+    setCurrentLink(input: number | Element) : void {
+        let link : Element = null;
+        if (typeof input === "number") {
+            link = this.root.querySelector("[data-slide='" + input + "']");
+        }
+        else {
+            link = input;
+        }
+
         let parent = link.parentElement;
         this.selectedIndex = Number(link.getAttribute("data-slide"));
         let a = parent.querySelectorAll("a");

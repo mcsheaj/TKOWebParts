@@ -16,7 +16,10 @@
         <div class="slider-wrapper" data-bind='foreach: images'>
             <div class="slide">
                 <img data-bind='attr: { src: Url, alt: Title, "data-slide": $index() }' />
-                <p class="caption" data-bind='text: Title'></p>
+                <div class="caption">
+                    <p class="caption" data-bind='text: Title'></p>
+                    <p class="description" data-bind='text: Description'></p>
+                </div>
             </div>
         </div>
     </div>

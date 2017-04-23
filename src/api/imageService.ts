@@ -24,14 +24,15 @@ export class ImageService {
         let url = _spPageContextInfo.webAbsoluteUrl +
             "/_api/web/lists/getByTitle('" + this.listTitle + "')" +
             "/RootFolder/Files/add(url='" + filename + "',overwrite='true')" +
-            "?" + "@TargetLibrary='" + this.listTitle + "'&@TargetFileName='" + filename + "'";
+            "?$expand=ListItemAllFields&" + "@TargetLibrary='" + this.listTitle +
+            "'&@TargetFileName='" + filename + "'";
 
         ajax({
-            method: "PUT",
+            method: "POST",
             url: url,
             headers: {
-                'X-RequestDigest': (<HTMLInputElement>document.getElementById("__REQUESTDIGEST")).value,
-                "X-HTTP-Method": "MERGE"
+               'accept': 'application/json;odata=verbose',
+                'X-RequestDigest': (<HTMLInputElement>document.getElementById("__REQUESTDIGEST")).value
             },
             data: buffer,
             success: function (request: XMLHttpRequest, json: any) {
