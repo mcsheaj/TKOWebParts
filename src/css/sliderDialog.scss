@@ -25,7 +25,7 @@ Modal in pure html and css - http://jsfiddle.net/kumarmuthaliar/GG9Sa/1/ by kuma
 
     /*https://css-tricks.com/centering-css-complete-guide/*/
     div {
-        width: 400px;
+        width: 600px;
         position: relative;
         margin: 0 auto;
         top: 50%;
@@ -66,17 +66,17 @@ Modal in pure html and css - http://jsfiddle.net/kumarmuthaliar/GG9Sa/1/ by kuma
 
     button.delete {
         position: relative;
-        left: 310px;
+        left: 510px;
     }
 
     button.editSave {
         position: relative;
-        left: 250px;
+        left: 450px;
     }
 
     button.editReset {
         position: relative;
-        left: 240px;
+        left: 440px;
     }
 
     &.show {
@@ -95,7 +95,7 @@ Modal in pure html and css - http://jsfiddle.net/kumarmuthaliar/GG9Sa/1/ by kuma
     }
 
     input {
-        width: 270px;
+        width: 370px;
     }
 }
 

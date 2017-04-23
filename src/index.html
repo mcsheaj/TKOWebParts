@@ -47,7 +47,7 @@
             <a data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' href="#" title="Close" class="close">X</a>
             <h2>Edit Image</h2>
             <span class="sliderFormLabel">Title</span><input data-bind="value: selected().Title" type="text" class="titleInput" /><br />
-            <span class="sliderFormLabel">Description</span><textarea rows="10" cols="45" data-bind="value: selected().Description" class="descriptionInput"></textarea><br />
+            <span class="sliderFormLabel">Description</span><textarea rows="10" cols="80" data-bind="value: selected().Description" class="descriptionInput"></textarea><br />
             <button type="button" data-bind='click: updateImage' class="sliderButton editSave">Ok</button>
             <button type="button" data-bind='click: resetImage' class="sliderButton editReset">Cancel</button>
         </div>
