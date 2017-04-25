@@ -12,9 +12,29 @@ interface Merge {
 
 export class ImageService {
     listTitle: string;
+    listItemEntityTypeFullName: string;
 
+    /*
+    Instantiate per list, save the list entity type full name for updates.
+    */
     constructor(listTitle: string) {
         this.listTitle = listTitle;
+
+        let url = "https://dev.wingtip.com/_api/Web/Lists/GetByTitle('" + listTitle +
+            "')?$select=ListItemEntityTypeFullName";
+
+        ajax({
+            url: url,
+            headers: {
+               'accept': 'application/json;odata=verbose'
+            },
+            success: (request: XMLHttpRequest, json: any) => {
+                this.listItemEntityTypeFullName = json.d.ListItemEntityTypeFullName;
+            },
+            error: function (request) {
+                alert("something bad happened");
+            }
+        });
     }
 
     /*
@@ -81,7 +101,7 @@ export class ImageService {
         let url = _spPageContextInfo.webAbsoluteUrl + serviceUrl;
         let digest = (<HTMLInputElement>document.getElementById("__REQUESTDIGEST")).value;
 
-        merge.__metadata = { type: "SP.Data.PicturesItem" };
+        merge.__metadata = { type: this.listItemEntityTypeFullName };
 
         ajax({
             method: "MERGE",
