@@ -11,12 +11,10 @@ export interface FileDropZoneConfig {
 }
 
 export class FileDropzone {
-    config: FileDropZoneConfig;
     element: Element;
     uploading: number;
 
-    constructor(config: FileDropZoneConfig) {
-        this.config = config;
+    constructor(public config: FileDropZoneConfig) {
         this.element = config.root.querySelector(config.selector);
         this.uploading = 0;
 
