@@ -12,7 +12,7 @@
 
 <body>
 
-    <div id="slider" class="slider">
+    <div id="slider" class="slider" data-bind='visible: $root.images().length > 0' style="display:none;">
         <div class="slider-wrapper" data-bind='foreach: images'>
             <div class="slide">
                 <img data-bind='attr: { src: Url, alt: Title, "data-slide": $index() }' />
@@ -37,11 +37,11 @@
             <img style="left: -109px; top: -289px;" alt="Delete Image" title="Delete Image" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
         </span>
     </div>
-    <div class="addSliderImages" style="display:none">
+    <div class="addSliderImages"  data-bind='visible: $root.images().length === 0' style="display:none;">
         <div>
             <div class="dragandrophandler">
                 <div class="draganddropbusy" style="display:none"><img src="/sites/csrdemos/_layouts/images/progress.gif"></div>
-                <div class="draganddroplabel">Drag & Drop Images To Add</div>
+                <div class="draganddroplabel">Drag & Drop Images Here...</div>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
         src='/Style Library/tkoWebPart/pnp-ww.js' 
         ww-appname='ImageSlider' 
         ww-appbind='tkoWebPart.imageSlider.init'
-        ww-appConfig='{"listTitle": "Pictures"}' 
+        ww-appConfig='{"listTitle": "Pictures2"}' 
         ww-appscripts='[{"src": "/Style Library/tkoWebPart/tkoWebPart.js", "priority":0}]'>
     </script>
 
