@@ -34,16 +34,14 @@ export class ImageSliderViewModel {
 
     slider: Slider;
     dropzone: FileDropzone;
-    config: SliderConfig;
 
     service: ImageService;
 
     /*
     Load the images from the source library into the model.
     */
-    constructor(id: string, config: SliderConfig) {
+    constructor(id: string, public config: SliderConfig) {
         // initialize members
-        this.config = config;
         this.images = ko.observableArray([]);
         this.webPartId = ko.observable(id);
         this.images = ko.observableArray([]);
