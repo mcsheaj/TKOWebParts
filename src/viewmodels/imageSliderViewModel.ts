@@ -34,8 +34,8 @@ export class ImageSliderViewModel {
 
     slider: Slider;
     dropzone: FileDropzone;
-
     service: ImageService;
+    nextIndex: number = 0;
 
     /*
     Load the images from the source library into the model.
@@ -71,7 +71,8 @@ export class ImageSliderViewModel {
     applySlider = (): void => {
         this.slider = new Slider(
             document.getElementById(this.webPartId()),
-            ".slider");
+            ".slider",
+            this.nextIndex);
     }
 
     /*
@@ -82,7 +83,7 @@ export class ImageSliderViewModel {
         this.service.createImage(filename,
             buffer,
             (json: any) => {
-                if(json.d.TimeCreated === json.d.TimeLastModified) {
+                if (json.d.TimeCreated === json.d.TimeLastModified) {
                     // construct the new image
                     let image = <Image>{
                         Id: json.d.ListItemAllFields.Id,
@@ -93,6 +94,8 @@ export class ImageSliderViewModel {
                         FileRef: _spPageContextInfo.webServerRelativeUrl +
                         this.config.listTitle + "/" + filename
                     };
+
+                    this.nextIndex = -1;
 
                     // push it to the array
                     this.images.push(image);
@@ -178,7 +181,7 @@ export class ImageSliderViewModel {
                 let deleted = this.images.splice(index, 1);
 
                 // re-initialize the slider
-                this.slider.init();
+                this.slider.init(index - 1);
 
                 // close the dialog
                 this.toggleDialog(".deleteSliderImage");
@@ -192,10 +195,10 @@ export class ImageSliderViewModel {
         let index = this.slider.getSelectedIndex();
         let root = document.getElementById(this.webPartId());
         let dialog = <HTMLElement>root.querySelector(dialogSelector);
-        if (this.images().length > 0) {
-            this.selected(this.images()[index]);
-        }
         if (dialog.className.indexOf("show") < 0) {
+            if (this.images().length > 0) {
+                this.selected(this.images()[index]);
+            }
             dialog.classList.add("show");
         }
         else {
