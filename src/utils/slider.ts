@@ -5,20 +5,23 @@ export class Slider {
     wrapper: HTMLElement;
     selectedIndex: number;
 
-    constructor(webPart: Element, selctor: string) {
+    constructor(webPart: Element, selctor: string, index: number) {
         this.root = webPart.querySelector(selctor);
-        this.init();
+        this.init(index);
     }
 
-    init() : void {
+    init(index: number) : void {
         this.links = this.root.parentElement.querySelectorAll(".slider-nav a");
         this.wrapper = <HTMLElement>this.root.querySelector(".slider-wrapper");
         for (let i = 0; i < this.links.length; ++i) {
             let link = this.links[i];
             this.initSlide(link);
-            if(this.links.length > 0) {
-                (<HTMLElement>this.links[0]).click();
-            }
+        }
+        if(index < 0) {
+            index = this.links.length + index;
+        }
+        if(this.links.length > index) {
+            (<HTMLElement>this.links[index]).click();
         }
     }
 
