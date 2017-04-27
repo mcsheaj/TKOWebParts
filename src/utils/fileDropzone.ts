@@ -17,29 +17,30 @@ export class FileDropzone {
     constructor(public config: FileDropZoneConfig) {
         this.element = config.root.querySelector(config.selector);
         this.uploading = 0;
+        if(this.element) {
+            this.element.addEventListener("dragover", (e: DragEvent) => {
+                e.cancelBubble = true;
+                if (e.stopPropagation) { e.stopPropagation(); }
+                if (e.preventDefault) { e.preventDefault(); }
+                if((<HTMLElement>e.target).className.indexOf("dragover") < 0) {
+                    (<HTMLElement>e.target).className = (<HTMLElement>e.target).className + " dragover";
+                }
+            });
 
-        this.element.addEventListener("dragover", (e: DragEvent) => {
-            e.cancelBubble = true;
-            if (e.stopPropagation) { e.stopPropagation(); }
-            if (e.preventDefault) { e.preventDefault(); }
-            if((<HTMLElement>e.target).className.indexOf("dragover") < 0) {
-                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className + " dragover";
-            }
-        });
+            this.element.addEventListener("dragleave", (e: DragEvent) => {
+                e.cancelBubble = true;
+                if (e.stopPropagation) { e.stopPropagation(); }
+                if (e.preventDefault) { e.preventDefault(); }
+                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ dragover/g, "");
+            });
 
-        this.element.addEventListener("dragleave", (e: DragEvent) => {
-            e.cancelBubble = true;
-            if (e.stopPropagation) { e.stopPropagation(); }
-            if (e.preventDefault) { e.preventDefault(); }
-            (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ dragover/g, "");
-        });
-
-        this.element.addEventListener("drop", (e: DragEvent) => {
-            (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ dragover/g, "");
-            if (e.preventDefault) { e.preventDefault(); }
-            let files = e.dataTransfer.files;
-            this.handleFileUpload(files);
-        });
+            this.element.addEventListener("drop", (e: DragEvent) => {
+                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ dragover/g, "");
+                if (e.preventDefault) { e.preventDefault(); }
+                let files = e.dataTransfer.files;
+                this.handleFileUpload(files);
+            });
+        }
     }
 
     handleFileUpload(files: FileList) {
