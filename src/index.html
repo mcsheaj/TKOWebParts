@@ -16,7 +16,7 @@
         <div class="slider-wrapper" data-bind='foreach: images'>
             <div class="slide">
                 <img data-bind='attr: { src: Url, alt: Title, "data-slide": $index() }' />
-                <div class="caption">
+                <div class="caption" data-bind="visible: Title">
                     <p class="caption" data-bind='text: Title'></p>
                     <p class="description" data-bind='text: Description'></p>
                 </div>
@@ -67,7 +67,7 @@
         src='/Style Library/tkoWebPart/pnp-ww.js' 
         ww-appname='ImageSlider' 
         ww-appbind='tkoWebPart.imageSlider.init'
-        ww-appConfig='{"listTitle": "Pictures2"}' 
+        ww-appConfig='{"listTitle": "Pictures"}' 
         ww-appscripts='[{"src": "/Style Library/tkoWebPart/tkoWebPart.js", "priority":0}]'>
     </script>
 
