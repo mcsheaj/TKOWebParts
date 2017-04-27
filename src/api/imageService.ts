@@ -74,7 +74,6 @@ export class ImageService {
 
         ajax({
             url: _spPageContextInfo.webAbsoluteUrl + serviceUrl + "?" + serviceParams,
-            async: false,
             success: (request: XMLHttpRequest, json: any) => {
                 if (request.status < 200 && request.status >= 400) {
                     alert(request.status + ": " + request.statusText);
