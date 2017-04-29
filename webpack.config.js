@@ -14,7 +14,7 @@ module.exports = {
         filename: 'tkoWebPart.js',
         library: 'tkoWebPart',
         libraryTarget: 'var',
-        path: 'z:/tkoWebPart',
+        path: './dist',
         publicPath: ''
     },
 
