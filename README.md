@@ -5,4 +5,4 @@ Code for "Customizing SharePoint with Knockout and TypeScript" at #SPSHOU
 
 Steps to setup:
 
-    1) Setup NodeJs and Visual Studio Code as per [Set up your SharePoint client-side web part development environment](https://dev.office.com/sharepoint/docs/spfx/set-up-your-development-environment)
+    1) Setup NodeJs and Visual Studio Code as per https://dev.office.com/sharepoint/docs/spfx/set-up-your-development-environment
