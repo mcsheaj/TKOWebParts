@@ -20,5 +20,3 @@ Steps to setup:
 
 Slides are in the root of the project.
 
-I'll write this up a bit better time-permitting
-
