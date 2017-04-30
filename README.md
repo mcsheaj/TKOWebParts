@@ -12,9 +12,9 @@ Steps to setup:
 - Clone the project on the command line:
     - change directory to where you want the project
     - **git clone https://github.com/mcsheaj/tkoWebPart.git**
-- Change directory to tkoWebPart
-- **npm install**
-- **npm run build**
+- Change directory to tkoWebPart and run the following commands to build the project:
+    - **npm install**
+    - **npm run build**
 - copy files in dist up to Style Library/tkoWebPart
 - copy everything in the body of index.html to the snippet of a script editor web part (note: if you're not on a host named site collection or the root site collection, you'll need to change the paths to the style library in this source first)
 
