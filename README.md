@@ -16,7 +16,7 @@ Steps to setup:
 - **npm install**
 - **npm run build**
 - copy files in dist up to Style Library/tkoWebPart
-- copy everything in the body of index.html to the snippet of a script editor web part (note: if your not on a host named site collection or the root site collection, you'll need to change the paths to the style library in this source first)
+- copy everything in the body of index.html to the snippet of a script editor web part (note: if you're not on a host named site collection or the root site collection, you'll need to change the paths to the style library in this source first)
 
 Slides are in the root of the project.
 
