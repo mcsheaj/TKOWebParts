@@ -11,7 +11,7 @@ Steps to setup:
 - Install git: https://git-scm.com/
 - Clone the project on the command line:
     - change directory to where you want the project
-    - **git clone https://github.com/mcsheaj/tkoWebPart.git**
+    - **git clone https://github.com/mcsheaj/tkoWebPart.git** (you'll need a github account for this)
 - Change directory to tkoWebPart and run the following commands to build the project:
     - **npm install**
     - **npm run build**
