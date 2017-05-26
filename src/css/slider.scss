@@ -69,6 +69,25 @@ $width: 800px;
         height: 2em;
         width: 6em;
     }
+
+    .icon {
+        width: 144px;
+        height: 144px;
+        position: relative;
+        float: left;
+        cursor: pointer;
+    }
+
+    .icon:hover {
+        background-color: palegoldenrod;
+    }
+
+    .svg-icon {
+        width: 4096;
+        height: 4096;
+        margin: 2 0 0 2;
+        fill: #1462ac
+    }
 }
 
 .slider ~ .slider-nav {

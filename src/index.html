@@ -27,17 +27,39 @@
         <a href="#" data-bind='attr: { "data-slide": $index() }'></a>
     </div>
     <div class="slider-menu" data-bind='visible: $root.images().length > 0' style="display:none;">
-        <span data-bind='click: $root.toggleDialog.bind($root, ".addSliderImages")' class="slider-button ms-cui-img-16by16 ms-cui-img-cont-float" unselectable="on">
-            <img style="left: -37px; top: -53px;" alt="Upload Images" title="Upload Images" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
-        </span>
-        <span data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' class="slider-button ms-cui-img-16by16 ms-cui-img-cont-float" unselectable="on">
-            <img style="left: -272px; top: -72px;" alt="Edit Image" title="Edit Image" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
-        </span>
-        <span data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' class="slider-button ms-cui-img-16by16 ms-cui-img-cont-float" unselectable="on">
-            <img style="left: -109px; top: -289px;" alt="Delete Image" title="Delete Image" src="/_layouts/15/1033/images/formatmap16x16.png?rev=40" unselectable="on">
-        </span>
+        <div data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' style="width: 36px; height: 36px; position: relative; cursor: pointer; float: right;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" style="fill: #1462ac">
+                <g transform="scale(0.03125)">
+                    <path d="M 192 1024 h 640 l 64 -704 h -768 Z M 640 128 v -128 h -256 v 128 h -320 v 192 l 64 -64 h 768 l 64 64 v -192 h -320 Z M 576 128 h -128 v -64 h 128 v 64 Z"
+                    />
+                </g>
+            </svg>
+        </div>
+        <div data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' style="width: 36px; height: 36px; position: relative; cursor: pointer; float: right;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" style="fill: #1462ac">
+                <g transform="scale(0.03125)">
+                    <path d="M 917.806 229.076 c -22.212 -30.292 -53.174 -65.7 -87.178 -99.704 s -69.412 -64.964 -99.704 -87.178 c -51.574 -37.82 -76.592 -42.194 -90.924 -42.194 h -496 c -44.112 0 -80 35.888 -80 80 v 864 c 0 44.112 35.888 80 80 80 h 736 c 44.112 0 80 -35.888 80 -80 v -624 c 0 -14.332 -4.372 -39.35 -42.194 -90.924 Z M 785.374 174.626 c 30.7 30.7 54.8 58.398 72.58 81.374 h -153.954 v -153.946 c 22.984 17.78 50.678 41.878 81.374 72.572 Z M 896 944 c 0 8.672 -7.328 16 -16 16 h -736 c -8.672 0 -16 -7.328 -16 -16 v -864 c 0 -8.672 7.328 -16 16 -16 c 0 0 495.956 -0.002 496 0 v 224 c 0 17.672 14.326 32 32 32 h 224 v 624 Z"
+                    />
+                    <path d="M 736 832 h -448 c -17.672 0 -32 -14.326 -32 -32 s 14.328 -32 32 -32 h 448 c 17.674 0 32 14.326 32 32 s -14.326 32 -32 32 Z"
+                    />
+                    <path d="M 736 704 h -448 c -17.672 0 -32 -14.326 -32 -32 s 14.328 -32 32 -32 h 448 c 17.674 0 32 14.326 32 32 s -14.326 32 -32 32 Z"
+                    />
+                    <path d="M 736 576 h -448 c -17.672 0 -32 -14.326 -32 -32 s 14.328 -32 32 -32 h 448 c 17.674 0 32 14.326 32 32 s -14.326 32 -32 32 Z"
+                    />
+                </g>
+            </svg>
+        </div>
+        <div data-bind='click: $root.toggleDialog.bind($root, ".addSliderImages")' style="width: 36px; height: 36px; position: relative; cursor: pointer; float: right;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" style="fill: #1462ac">
+                <g transform="scale(0.03125)">
+                    <path d="M 992 384 h -352 v -352 c 0 -17.672 -14.328 -32 -32 -32 h -192 c -17.672 0 -32 14.328 -32 32 v 352 h -352 c -17.672 0 -32 14.328 -32 32 v 192 c 0 17.672 14.328 32 32 32 h 352 v 352 c 0 17.672 14.328 32 32 32 h 192 c 17.672 0 32 -14.328 32 -32 v -352 h 352 c 17.672 0 32 -14.328 32 -32 v -192 c 0 -17.672 -14.328 -32 -32 -32 Z"
+                    />
+                </g>
+            </svg>
+        </div>
+        <div style="clear:both"></div>
     </div>
-    <div class="addSliderImages"  data-bind='visible: $root.images().length === 0' style="display:none;">
+    <div class="addSliderImages" data-bind='visible: $root.images().length === 0' style="display:none;">
         <div>
             <div class="dragandrophandler">
                 <div class="draganddropbusy" style="display:none"><img src="/sites/csrdemos/_layouts/images/progress.gif"></div>
@@ -49,8 +71,10 @@
         <div>
             <a data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' href="#" title="Close" class="close">X</a>
             <h2>Edit Image</h2>
-            <span class="sliderFormLabel">Title</span><input data-bind="value: selected().Title" type="text" class="titleInput" /><br />
-            <span class="sliderFormLabel">Description</span><textarea rows="10" cols="80" data-bind="value: selected().Description" class="descriptionInput"></textarea><br />
+            <span class="sliderFormLabel">Title</span><input data-bind="value: selected().Title" type="text" class="titleInput"
+            /><br />
+            <span class="sliderFormLabel">Description</span><textarea rows="10" cols="80" data-bind="value: selected().Description"
+                class="descriptionInput"></textarea><br />
             <button type="button" data-bind='click: updateImage' class="sliderButton editSave">Ok</button>
             <button type="button" data-bind='click: resetImage' class="sliderButton editReset">Cancel</button>
         </div>
