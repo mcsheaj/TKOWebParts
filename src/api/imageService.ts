@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { ajax, Options } from '../utils/ajax';
+import { ajax, Options } from "../utils/ajax";
 
 interface Callback {
     (json: any): void;
@@ -23,7 +23,7 @@ export class ImageService {
         ajax({
             url: url,
             headers: {
-               'accept': 'application/json;odata=verbose'
+               "accept": "application/json;odata=verbose"
             },
             success: (request: XMLHttpRequest, json: any) => {
                 this.listItemEntityTypeFullName = json.d.ListItemEntityTypeFullName;
@@ -48,8 +48,8 @@ export class ImageService {
             method: "POST",
             url: url,
             headers: {
-               'accept': 'application/json;odata=verbose',
-                'X-RequestDigest': (<HTMLInputElement>document.getElementById("__REQUESTDIGEST")).value
+               "accept": "application/json;odata=verbose",
+                "X-RequestDigest": (<HTMLInputElement>document.getElementById("__REQUESTDIGEST")).value
             },
             data: buffer,
             success: function (request: XMLHttpRequest, json: any) {

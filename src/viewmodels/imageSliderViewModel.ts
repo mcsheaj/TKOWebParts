@@ -1,13 +1,13 @@
-import '../css/slider.scss';
-import '../css/sliderButton.scss';
-import '../css/sliderDialog.scss';
-import '../css/sliderDropzone.scss';
+import "../css/slider.scss";
+import "../css/sliderButton.scss";
+import "../css/sliderDialog.scss";
+import "../css/sliderDropzone.scss";
 
 import * as ko from "knockout";
-import { ImageService } from '../api/imageService';
-import { Slider } from '../utils/slider';
-import { FileDropzone, CompleteCallback } from '../utils/fileDropzone';
-import { protectedObservable, KnockoutProtectedObservable } from './protectedObservable';
+import { ImageService } from "../api/imageService";
+import { Slider } from "../utils/slider";
+import { FileDropzone, CompleteCallback } from "../utils/fileDropzone";
+import { protectedObservable, KnockoutProtectedObservable } from "./protectedObservable";
 
 // web part configuration
 export interface SliderConfig {

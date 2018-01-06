@@ -11,7 +11,7 @@ export interface Options {
 export function ajax(options: Options) {
     options.method = options.method || "GET";
     options.headers = options.headers || {};
-    options.headers.accept = options.headers.accept || 'application/json;odata=verbose';
+    options.headers.accept = options.headers.accept || "application/json;odata=verbose";
     options.data = options.data || null;
     options.async = typeof (options.async) === "undefined" ? true : options.async;
 

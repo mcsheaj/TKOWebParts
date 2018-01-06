@@ -1,8 +1,8 @@
-import './css/styles.scss';
+import "./css/styles.scss";
 
-import * as ko from 'knockout';
-import { ImageSliderViewModel, SliderConfig } from './viewmodels/imageSliderViewModel';
-import { Slider } from './utils/slider';
+import * as ko from "knockout";
+import { ImageSliderViewModel, SliderConfig } from "./viewmodels/imageSliderViewModel";
+import { Slider } from "./utils/slider";
 
 let tkoWebPart = {
 
