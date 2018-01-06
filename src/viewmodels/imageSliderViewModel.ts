@@ -7,6 +7,7 @@ import * as ko from "knockout";
 import { ImageService } from '../api/imageService';
 import { Slider } from '../utils/slider';
 import { FileDropzone, CompleteCallback } from '../utils/fileDropzone';
+import { protectedObservable, KnockoutProtectedObservable } from './protectedObservable';
 
 // web part configuration
 export interface SliderConfig {
@@ -16,8 +17,8 @@ export interface SliderConfig {
 // model for a single image.
 export interface Image {
     Url: KnockoutObservable<string>;
-    Title: KnockoutObservable<string>;
-    Description: KnockoutObservable<string>;
+    Title: KnockoutProtectedObservable<string>;
+    Description: KnockoutProtectedObservable<string>;
     Id: number;
     FileRef: string;
     OriginalTitle: string;
@@ -89,8 +90,8 @@ export class ImageSliderViewModel {
                         Id: json.d.ListItemAllFields.Id,
                         Url: ko.observable(_spPageContextInfo.webServerRelativeUrl +
                             this.config.listTitle + "/" + filename),
-                        Title: ko.observable(""),
-                        Description: ko.observable(""),
+                        Title: protectedObservable(""),
+                        Description: protectedObservable(""),
                         FileRef: _spPageContextInfo.webServerRelativeUrl +
                         this.config.listTitle + "/" + filename
                     };
@@ -121,8 +122,8 @@ export class ImageSliderViewModel {
                     current.OriginalTitle = current.Title;
                     current.OriginalDescription = current.Description;
                     current.Url = ko.observable(current.FileRef);
-                    current.Title = ko.observable(current.Title);
-                    current.Description = ko.observable(current.Description);
+                    current.Title = protectedObservable(current.Title);
+                    current.Description = protectedObservable(current.Description);
 
                     // push it onto the array
                     tmp.push(current);
@@ -150,8 +151,8 @@ export class ImageSliderViewModel {
             { Title: current.Title(), Description: current.Description() },
             (json: any) => {
                 // overwrite the reset state
-                current.OriginalTitle = current.Title();
-                current.OriginalDescription = current.Description();
+                current.Title.commit();
+                current.Description.commit();
 
                 // close the dialog
                 this.toggleDialog(".editSliderImage");
@@ -165,8 +166,8 @@ export class ImageSliderViewModel {
     resetImage = (): void => {
         let index = this.slider.getSelectedIndex();
         let current = this.images()[index];
-        current.Title(current.OriginalTitle);
-        current.Description(current.OriginalDescription);
+        current.Title.reset();
+        current.Description.reset();
         this.toggleDialog(".editSliderImage");
     }
 
