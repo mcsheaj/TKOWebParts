@@ -9,6 +9,7 @@
     vertical-align: middle;
     line-height: 150px;
     background-color: rgba(11, 133, 161, .1);
+    display: none;
 
     &.dragandrophandler.dragover {
         border: 2px solid rgba(11, 133, 161, 1);
