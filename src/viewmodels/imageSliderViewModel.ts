@@ -166,8 +166,11 @@ export class ImageSliderViewModel {
     resetImage = (): void => {
         let index = this.slider.getSelectedIndex();
         let current = this.images()[index];
+
+        // reset the observables
         current.Title.reset();
         current.Description.reset();
+        
         this.toggleDialog(".editSliderImage");
     }
 
