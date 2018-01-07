@@ -6,16 +6,16 @@ export interface KnockoutProtectedObservable<T> extends KnockoutObservable<T> {
 }
 
 export function protectedObservable(value: any) : KnockoutProtectedObservable<any> {
-    let actual : KnockoutProtectedObservable<any> = ko.observable(value) as KnockoutProtectedObservable<any>;
-    let cache = value;
+    let current : KnockoutProtectedObservable<any> = ko.observable(value) as KnockoutProtectedObservable<any>;
+    let original = value;
 
-    actual.commit = function() : void {
-        cache = actual();
+    current.commit = function() : void {
+        original = current();
     };
 
-    actual.reset = function() : void {
-        actual(cache);
+    current.reset = function() : void {
+        current(original);
     };
 
-    return actual;
+    return current;
 }
