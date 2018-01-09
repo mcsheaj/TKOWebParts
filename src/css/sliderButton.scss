@@ -1,7 +1,33 @@
-.slider-button {
-    cursor: pointer;
-}
 
-.slider-button:hover {
-    background-color: palegoldenrod;
+.slider-menu {
+    width: 750px;
+    margin: 0 auto;
+    text-align: right;
+    padding-bottom: 10px;
+
+    .slider-button {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        display: inline-block;
+        cursor: pointer;
+        background-size: cover;
+    }
+
+    .slider-button:hover {
+        background-color: palegoldenrod;
+    }
+
+    .add {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='24' height='24' style='fill: %231462ac'%3e%3cg transform='scale(0.03125)'%3e%3cpath d='M 992 384 h -352 v -352 c 0 -17.672 -14.328 -32 -32 -32 h -192 c -17.672 0 -32 14.328 -32 32 v 352 h -352 c -17.672 0 -32 14.328 -32 32 v 192 c 0 17.672 14.328 32 32 32 h 352 v 352 c 0 17.672 14.328 32 32 32 h 192 c 17.672 0 32 -14.328 32 -32 v -352 h 352 c 17.672 0 32 -14.328 32 -32 v -192 c 0 -17.672 -14.328 -32 -32 -32 Z'/%3e%3c/g%3e%3c/svg%3e");
+    }
+
+    .edit {
+        background-image: url("data:image/svg+xml;charset=UTF-8, %3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='24' height='24' style='fill: %231462ac'%3e%3cg transform='scale(0.03125)'%3e%3cpath d='M 864 0 c 88.364 0 160 71.634 160 160 c 0 36.02 -11.91 69.258 -32 96 l -64 64 l -224 -224 l 64 -64 c 26.742 -20.09 59.978 -32 96 -32 Z M 64 736 l -64 288 l 288 -64 l 592 -592 l -224 -224 l -592 592 Z M 715.578 363.578 l -448 448 l -55.156 -55.156 l 448 -448 l 55.156 55.156 Z' /%3e%3c/g%3e%3c/svg%3e ");
+    }
+
+    .delete {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='24' height='24' style='fill: %231462ac'%3e%3cg transform='scale(0.03125)'%3e%3cpath d='M 192 1024 h 640 l 64 -704 h -768 Z M 640 128 v -128 h -256 v 128 h -320 v 192 l 64 -64 h 768 l 64 64 v -192 h -320 Z M 576 128 h -128 v -64 h 128 v 64 Z'/%3e%3c/g%3e%3c/svg%3e");
+    }
 }

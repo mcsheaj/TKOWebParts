@@ -7,7 +7,7 @@ import * as ko from "knockout";
 import { ImageService } from "../api/imageService";
 import { Slider } from "../utils/slider";
 import { FileDropzone, CompleteCallback } from "../utils/fileDropzone";
-import { protectedObservable, KnockoutProtectedObservable } from "./protectedObservable";
+import { protectedObservable, KnockoutProtectedObservable } from "../ko/protectedObservable";
 
 // web part configuration
 export interface SliderConfig {
@@ -29,7 +29,7 @@ export interface Image {
 View model for the image slider.
 */
 export class ImageSliderViewModel {
-    webPartId: KnockoutObservable<string>;
+    webPartId: string;
     images: KnockoutObservableArray<Image>;
     selected: KnockoutObservable<Image>;
 
@@ -44,7 +44,7 @@ export class ImageSliderViewModel {
     constructor(id: string, public config: SliderConfig) {
         // initialize members
         this.images = ko.observableArray([]);
-        this.webPartId = ko.observable(id);
+        this.webPartId = id;
         this.images = ko.observableArray([]);
         this.service = new ImageService(this.config.listTitle);
         this.selected = ko.observable(<Image>{
@@ -59,7 +59,7 @@ export class ImageSliderViewModel {
 
         // initialize the drop zone for adding images
         this.dropzone = new FileDropzone({
-            root: document.getElementById(this.webPartId()),
+            root: document.getElementById(this.webPartId),
             selector: ".dragandrophandler",
             fileCallback: this.createImage
         });
@@ -71,7 +71,7 @@ export class ImageSliderViewModel {
     */
     applySlider = (): void => {
         this.slider = new Slider(
-            document.getElementById(this.webPartId()),
+            document.getElementById(this.webPartId),
             ".slider",
             this.nextIndex);
     }
@@ -170,7 +170,7 @@ export class ImageSliderViewModel {
         // reset the observables
         current.Title.reset();
         current.Description.reset();
-        
+
         this.toggleDialog(".editSliderImage");
     }
 
@@ -197,7 +197,7 @@ export class ImageSliderViewModel {
     */
     toggleDialog = (dialogSelector: string): void => {
         let index = this.slider.getSelectedIndex();
-        let root = document.getElementById(this.webPartId());
+        let root = document.getElementById(this.webPartId);
         let dialog = <HTMLElement>root.querySelector(dialogSelector);
         if (dialog.className.indexOf("show") < 0) {
             if (this.images().length > 0) {

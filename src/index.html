@@ -27,28 +27,9 @@
         <a href="#" data-bind='attr: { "data-slide": $index() }'></a>
     </div>
     <div class="slider-menu" data-bind='visible: $root.images().length > 0' style="display:none;">
-        <div title="Delete" data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' style="width: 36px; height: 36px; position: relative; cursor: pointer; float: right;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" style="fill: #1462ac">
-                <g transform="scale(0.03125)">
-                    <path d="M 192 1024 h 640 l 64 -704 h -768 Z M 640 128 v -128 h -256 v 128 h -320 v 192 l 64 -64 h 768 l 64 64 v -192 h -320 Z M 576 128 h -128 v -64 h 128 v 64 Z"/>
-                </g>
-            </svg>
-        </div>
-        <div title="Edit" data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' style="width: 36px; height: 36px; position: relative; cursor: pointer; float: right;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" style="fill: #1462ac">
-                <g transform="scale(0.03125)">
-                    <path d="M 864 0 c 88.364 0 160 71.634 160 160 c 0 36.02 -11.91 69.258 -32 96 l -64 64 l -224 -224 l 64 -64 c 26.742 -20.09 59.978 -32 96 -32 Z M 64 736 l -64 288 l 288 -64 l 592 -592 l -224 -224 l -592 592 Z M 715.578 363.578 l -448 448 l -55.156 -55.156 l 448 -448 l 55.156 55.156 Z" />
-                </g>
-            </svg>
-        </div>
-        <div title="Add" data-bind='click: $root.toggleDialog.bind($root, ".addSliderImages")' style="width: 36px; height: 36px; position: relative; cursor: pointer; float: right;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" style="fill: #1462ac">
-                <g transform="scale(0.03125)">
-                    <path d="M 992 384 h -352 v -352 c 0 -17.672 -14.328 -32 -32 -32 h -192 c -17.672 0 -32 14.328 -32 32 v 352 h -352 c -17.672 0 -32 14.328 -32 32 v 192 c 0 17.672 14.328 32 32 32 h 352 v 352 c 0 17.672 14.328 32 32 32 h 192 c 17.672 0 32 -14.328 32 -32 v -352 h 352 c 17.672 0 32 -14.328 32 -32 v -192 c 0 -17.672 -14.328 -32 -32 -32 Z"/>
-                </g>
-            </svg>
-        </div>
-        <div style="clear:both"></div>
+        <div title="Add" data-bind='click: $root.toggleDialog.bind($root, ".addSliderImages")' class='slider-button add'></div>
+        <div title="Edit" data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' class='slider-button edit'></div>
+        <div title="Delete" data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' class='slider-button delete'></div>
     </div>
     <div class="addSliderImages" data-bind='visible: $root.images().length === 0' style="display:none;">
         <div>
