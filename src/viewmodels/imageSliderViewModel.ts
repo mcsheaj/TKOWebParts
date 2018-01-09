@@ -33,6 +33,11 @@ export class ImageSliderViewModel {
     images: KnockoutObservableArray<Image>;
     selected: KnockoutObservable<Image>;
 
+    // dialog observables
+    addDialog: KnockoutObservable<boolean>;
+    editDialog: KnockoutObservable<boolean>;
+    deleteDialog: KnockoutObservable<boolean>;
+
     slider: Slider;
     dropzone: FileDropzone;
     service: ImageService;
@@ -43,16 +48,22 @@ export class ImageSliderViewModel {
     */
     constructor(id: string, public config: SliderConfig) {
         // initialize members
-        this.images = ko.observableArray([]);
         this.webPartId = id;
-        this.images = ko.observableArray([]);
         this.service = new ImageService(this.config.listTitle);
+
+        // initialize observables
+        this.images = ko.observableArray([]);
         this.selected = ko.observable(<Image>{
             Url: ko.observable(""),
             Title: ko.observable(""),
             Description: ko.observable(""),
             FileRef: ""
         });
+
+        // initialize dialog observables
+        this.addDialog = ko.observable(false);
+        this.editDialog = ko.observable(false);
+        this.deleteDialog = ko.observable(false);
 
         // read in images and push them to this.images
         this.readImages();
@@ -155,7 +166,7 @@ export class ImageSliderViewModel {
                 current.Description.commit();
 
                 // close the dialog
-                this.toggleDialog(".editSliderImage");
+                this.toggleDialog(this.editDialog);
             });
     }
 
@@ -171,7 +182,7 @@ export class ImageSliderViewModel {
         current.Title.reset();
         current.Description.reset();
 
-        this.toggleDialog(".editSliderImage");
+        this.toggleDialog(this.editDialog);
     }
 
     /*
@@ -188,25 +199,14 @@ export class ImageSliderViewModel {
                 this.slider.init(index - 1);
 
                 // close the dialog
-                this.toggleDialog(".deleteSliderImage");
+                this.toggleDialog(this.deleteDialog);
             });
     }
 
     /*
     Helper callback to launch one of the dialogs.
     */
-    toggleDialog = (dialogSelector: string): void => {
-        let index = this.slider.getSelectedIndex();
-        let root = document.getElementById(this.webPartId);
-        let dialog = <HTMLElement>root.querySelector(dialogSelector);
-        if (dialog.className.indexOf("show") < 0) {
-            if (this.images().length > 0) {
-                this.selected(this.images()[index]);
-            }
-            dialog.classList.add("show");
-        }
-        else {
-            dialog.classList.remove("show");
-        }
+    toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
+        dialog(!dialog());
     }
 }

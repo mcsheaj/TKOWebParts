@@ -27,11 +27,11 @@
         <a href="#" data-bind='attr: { "data-slide": $index() }'></a>
     </div>
     <div class="slider-menu" data-bind='visible: $root.images().length > 0' style="display:none;">
-        <div title="Add" data-bind='click: $root.toggleDialog.bind($root, ".addSliderImages")' class='slider-button add'></div>
-        <div title="Edit" data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' class='slider-button edit'></div>
-        <div title="Delete" data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' class='slider-button delete'></div>
+        <div title="Add" data-bind='click: $root.toggleDialog.bind($root, addDialog)' class='slider-button add'></div>
+        <div title="Edit" data-bind='click: $root.toggleDialog.bind($root, editDialog)' class='slider-button edit'></div>
+        <div title="Delete" data-bind='click: $root.toggleDialog.bind($root, deleteDialog)' class='slider-button delete'></div>
     </div>
-    <div class="addSliderImages" data-bind='visible: $root.images().length === 0' style="display:none;">
+    <div class="addSliderImages" data-bind='{ toggleDialog: $root.addDialog(); visible: $root.images().length === 0 }' style="display:none;">
         <div>
             <div class="dragandrophandler">
                 <div class="draganddropbusy" style="display:none"><img src="/sites/csrdemos/_layouts/images/progress.gif"></div>
@@ -39,9 +39,9 @@
             </div>
         </div>
     </div>
-    <div class="editSliderImage modalDialog" style="display:none">
+    <div class="editSliderImage modalDialog" data-bind='toggleDialog: editDialog()' style="display:none">
         <div>
-            <a data-bind='click: $root.toggleDialog.bind($root, ".editSliderImage")' href="#" title="Close" class="close">X</a>
+            <a data-bind='click: $root.toggleDialog.bind($root, editDialog)' href="#" title="Close" class="close">X</a>
             <h2>Edit Image</h2>
             <span class="sliderFormLabel">Title</span><input data-bind="value: selected().Title" type="text" class="titleInput"
             /><br />
@@ -51,9 +51,9 @@
             <button type="button" data-bind='click: resetImage' class="sliderButton editReset">Cancel</button>
         </div>
     </div>
-    <div class="deleteSliderImage modalDialog" style="display:none">
+    <div class="deleteSliderImage modalDialog" data-bind='toggleDialog: deleteDialog()' style="display:none">
         <div>
-            <a data-bind='click: $root.toggleDialog.bind($root, ".deleteSliderImage")' href="#" title="Close" class="close">X</a>
+            <a data-bind='click: $root.toggleDialog.bind($root, deleteDialog)' href="#" title="Close" class="close">X</a>
             <h2>Delete Confirmation</h2>
             <p>Are you sure you want to delete the current image?</p>
             <button type="button" data-bind='click: deleteImage' class="sliderButton delete">Delete</button>
