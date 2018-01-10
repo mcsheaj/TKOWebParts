@@ -1,121 +1,122 @@
 $height: 550px;
 $width: 800px;
 
-.slider {
-    margin: 2em auto;
-    width: $width;
-    overflow: hidden;
-
-    .slider-wrapper {
-        width: 99999px;
-        height: $height;
-        position: relative;
-        transition: left 400ms linear;
-    }
-
-    .slide {
-        float: left;
+.image-slider-outer {
+    .slider {
+        margin: 2em auto;
         width: $width;
-        height: $height;
-        position: relative;
         overflow: hidden;
 
-        img {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .slider-wrapper {
+            width: 99999px;
             height: $height;
+            position: relative;
+            transition: left 400ms linear;
+        }
+
+        .slide {
+            float: left;
             width: $width;
+            height: $height;
+            position: relative;
+            overflow: hidden;
+
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: $height;
+                width: $width;
+            }
+        }
+
+        div.caption {
+            margin: 0;
+            position: absolute;
+            z-index: 100;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba( 0, 0, 0, 0.6);
+            padding-bottom: 10px;
+        }
+
+        p.caption {
+            margin: 0;
+            font-size: 2em;
+            line-height: 1.5;
+            text-align: center;
+            color: #fff;
+            transition: bottom 500ms ease-in;
+        }
+
+        p.description {
+            margin: 0;
+            font-size: 1.2em;
+            color: #fff;        
+            padding: 0 10px;
+            line-height: 1em;
+            display: none;
+        }
+
+        .caption.visible {
+            bottom: 0;
+        }
+
+        .menu-span {
+            top: 25px;
+            left: 680px;
+            background-color: rgba(255,255,255,.8);
+            height: 2em;
+            width: 6em;
+        }
+
+        .icon {
+            width: 144px;
+            height: 144px;
+            position: relative;
+            float: left;
+            cursor: pointer;
+        }
+
+        .icon:hover {
+            background-color: palegoldenrod;
+        }
+
+        .svg-icon {
+            width: 4096;
+            height: 4096;
+            margin: 2 0 0 2;
+            fill: #1462ac
         }
     }
 
-    div.caption {
-        margin: 0;
-        position: absolute;
-        z-index: 100;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: rgba( 0, 0, 0, 0.6);
-        padding-bottom: 10px;
-    }
-
-    p.caption {
-        margin: 0;
-        font-size: 2em;
-        line-height: 1.5;
+    .slider ~ .slider-nav {
+        margin: 1em 0;
         text-align: center;
-        color: #fff;
-        transition: bottom 500ms ease-in;
+
+        a {
+            width: 1em;
+            height: 1em;
+            border: 1px solid #ccc;
+            text-align: center;
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+            line-height: 2;
+            margin-right: 0.5em;
+            border-radius: 50%;
+        }
+
+        a.current {
+            border-color: #000;
+            background-color: rgba(200, 200, 100, .7)
+        }
     }
 
-    p.description {
-        margin: 0;
-        font-size: 1.2em;
-        color: #fff;        
-        padding: 0 10px;
-        line-height: 1em;
-        display: none;
-    }
-
-    .caption.visible {
-        bottom: 0;
-    }
-
-    .menu-span {
-        top: 25px;
-        left: 680px;
-        background-color: rgba(255,255,255,.8);
-        height: 2em;
-        width: 6em;
-    }
-
-    .icon {
-        width: 144px;
-        height: 144px;
-        position: relative;
-        float: left;
-        cursor: pointer;
-    }
-
-    .icon:hover {
-        background-color: palegoldenrod;
-    }
-
-    .svg-icon {
-        width: 4096;
-        height: 4096;
-        margin: 2 0 0 2;
-        fill: #1462ac
-    }
+    .slide:hover p.description {
+        display: block;
+    } 
 }
-
-.slider ~ .slider-nav {
-    margin: 1em 0;
-    text-align: center;
-
-    a {
-        width: 1em;
-        height: 1em;
-        border: 1px solid #ccc;
-        text-align: center;
-        text-decoration: none;
-        color: #000;
-        display: inline-block;
-        line-height: 2;
-        margin-right: 0.5em;
-        border-radius: 50%;
-    }
-
-    a.current {
-        border-color: #000;
-        background-color: rgba(200, 200, 100, .7)
-    }
-}
-
-.slide:hover p.description {
-    display: block;
-} 
-
 
 
