@@ -210,6 +210,8 @@ export class ImageSliderViewModel {
     Helper callback to launch one of the dialogs.
     */
     toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
+        let index = this.slider.getSelectedIndex();
+        this.selected(this.images()[index]);
         dialog(!dialog());
     }
 }
