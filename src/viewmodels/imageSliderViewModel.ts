@@ -1,8 +1,3 @@
-import "../css/slider.scss";
-import "../css/sliderButton.scss";
-import "../css/sliderDialog.scss";
-import "../css/sliderDropzone.scss";
-
 import * as ko from "knockout";
 import { ImageService } from "../api/imageService";
 import { Slider } from "../utils/slider";
@@ -72,7 +67,8 @@ export class ImageSliderViewModel {
         this.dropzone = new FileDropzone({
             root: document.getElementById(this.webPartId),
             selector: ".dragandrophandler",
-            fileCallback: this.createImage
+            fileCallback: this.createImage,
+            completeCallback: this.closeAddDialog,
         });
     }
 
@@ -89,7 +85,7 @@ export class ImageSliderViewModel {
 
     /*
     Create a new image in the source library from data passed from the drop
-    zone, and add it to the model.
+    zone, and add it to the model. Callback for FileDropzone.
     */
     createImage = (filename: string, buffer: any, complete: CompleteCallback): void => {
         this.service.createImage(filename,
@@ -116,6 +112,13 @@ export class ImageSliderViewModel {
                 // tell the drop zone we're finished
                 complete();
             });
+    }
+
+    /*
+    Close the add dialog when all images have been updated. Callback for FileDropzone.
+    */
+    closeAddDialog = (): void => {
+        this.toggleDialog(this.addDialog);
     }
 
     /*

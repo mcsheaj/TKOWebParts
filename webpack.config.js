@@ -7,15 +7,15 @@ module.exports = {
 
     entry: [
         path.resolve(__dirname, 'src/setPublicPath.ts'),
-        path.resolve(__dirname, 'src/index.ts')
+        path.resolve(__dirname, 'src/app.ts')
     ],
 
     output: {
         filename: 'tkoWebPart.js',
         library: 'tkoWebPart',
         libraryTarget: 'var',
-        path: path.resolve(__dirname, 'dist'),
-        //path: path.resolve('z:', 'tkoWebPart'),
+        //path: path.resolve(__dirname, 'dist'),
+        path: path.resolve('z:', 'tkoWebPart'),
         publicPath: ''
     },
 

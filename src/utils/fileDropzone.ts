@@ -13,16 +13,18 @@ export interface FileDropZoneConfig {
 export class FileDropzone {
     element: Element;
     uploading: number;
+    fileArray: any[];
 
     constructor(public config: FileDropZoneConfig) {
         this.element = config.root.querySelector(config.selector);
         this.uploading = 0;
-        if(this.element) {
+        this.fileArray = [];
+        if (this.element) {
             this.element.addEventListener("dragover", (e: DragEvent) => {
                 e.cancelBubble = true;
                 if (e.stopPropagation) { e.stopPropagation(); }
                 if (e.preventDefault) { e.preventDefault(); }
-                if((<HTMLElement>e.target).className.indexOf("dragover") < 0) {
+                if ((<HTMLElement>e.target).className.indexOf("dragover") < 0) {
                     (<HTMLElement>e.target).className = (<HTMLElement>e.target).className + " dragover";
                 }
             });
@@ -44,24 +46,26 @@ export class FileDropzone {
     }
 
     handleFileUpload(files: FileList) {
-        let fileArray: any[] = [];
         for (let i = 0; i < files.length; i++) {
-            fileArray.push(files[i]);
+            this.fileArray.push(files[i]);
         }
 
         let doUpTo5Files = () => {
-            while (fileArray.length > 0 && this.uploading < 5) {
-                let file = fileArray.splice(0, 1);
+            while (this.fileArray.length > 0 && this.uploading < 5) {
+                let file = this.fileArray.splice(0, 1);
                 this.createImage(file[0]);
             }
         };
 
         doUpTo5Files();
-        if (fileArray.length > 0) {
+        if (this.fileArray.length > 0) {
             let id = setInterval(function () {
-                doUpTo5Files();
-                if (fileArray.length === 0) {
-                    clearInterval(id);
+                if(this.uploading === 0 && this.fileArray.length > 0)
+                {
+                    doUpTo5Files();
+                    if (this.fileArray.length === 0) {
+                        clearInterval(id);
+                    }
                 }
             }, 1000);
         }
@@ -80,10 +84,10 @@ export class FileDropzone {
 
             let decrement = () => {
                 this.uploading--;
-                if (!this.uploading) {
+                if (this.uploading === 0 && this.fileArray.length == 0) {
                     (<HTMLElement>this.element.querySelector(".draganddroplabel")).style.display = "block";
                     (<HTMLElement>this.element.querySelector(".draganddropbusy")).style.display = "none";
-                    if(this.config.completeCallback) {
+                    if (this.config.completeCallback) {
                         this.config.completeCallback();
                     }
                 }
