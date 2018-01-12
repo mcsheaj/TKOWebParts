@@ -17,7 +17,7 @@ export class ImageService {
     Instantiate per list, save the list entity type full name for updates.
     */
     constructor(public listTitle: string) {
-        let url = "https://dev.wingtip.com/_api/Web/Lists/GetByTitle('" + listTitle +
+        let url = _spPageContextInfo.webAbsoluteUrl + "/_api/Web/Lists/GetByTitle('" + listTitle +
             "')?$select=ListItemEntityTypeFullName";
 
         ajax({
