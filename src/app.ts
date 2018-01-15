@@ -4,6 +4,7 @@ import "./css/sliderButton.scss";
 import "./css/sliderDialog.scss";
 import "./css/sliderDropzone.scss";
 
+import "es6-promise/auto";
 import * as ko from "knockout";
 import { ImageSliderViewModel, SliderConfig } from "./viewmodels/imageSliderViewModel";
 import { toggleDialog } from "./ko/bindingHandlers";

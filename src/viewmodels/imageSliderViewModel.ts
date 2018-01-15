@@ -16,8 +16,6 @@ export interface Image {
     Description: KnockoutProtectedObservable<string>;
     Id: number;
     FileRef: string;
-    OriginalTitle: string;
-    OriginalDescription: string;
 }
 
 /*
@@ -91,16 +89,16 @@ export class ImageSliderViewModel {
         this.service.createImage(filename,
             buffer,
             (json: any) => {
-                if (json.d.TimeCreated === json.d.TimeLastModified) {
+                if (json.TimeCreated === json.TimeLastModified) {
                     // construct the new image
                     let image = <Image>{
-                        Id: json.d.ListItemAllFields.Id,
+                        Id: json.ListItemAllFields.Id,
                         Url: ko.observable(_spPageContextInfo.webServerRelativeUrl +
                             this.config.listTitle + "/" + filename),
                         Title: protectedObservable(""),
                         Description: protectedObservable(""),
                         FileRef: _spPageContextInfo.webServerRelativeUrl +
-                        this.config.listTitle + "/" + filename
+                            this.config.listTitle + "/" + filename
                     };
 
                     this.nextIndex = -1;
@@ -115,13 +113,6 @@ export class ImageSliderViewModel {
     }
 
     /*
-    Close the add dialog when all images have been updated. Callback for FileDropzone.
-    */
-    closeAddDialog = (): void => {
-        this.toggleDialog(this.addDialog);
-    }
-
-    /*
     Read all images from the source library and push them to the model.
     */
     readImages = (): void => {
@@ -133,8 +124,6 @@ export class ImageSliderViewModel {
                     let current = json[i];
 
                     // convert the result to an image model.
-                    current.OriginalTitle = current.Title;
-                    current.OriginalDescription = current.Description;
                     current.Url = ko.observable(current.FileRef);
                     current.Title = protectedObservable(current.Title);
                     current.Description = protectedObservable(current.Description);
@@ -213,5 +202,12 @@ export class ImageSliderViewModel {
         let index = this.slider.getSelectedIndex();
         this.selected(this.images()[index]);
         dialog(!dialog());
+    }
+
+    /*
+    Close the add dialog when all images have been updated. Callback for FileDropzone.
+    */
+    closeAddDialog = (): void => {
+        this.toggleDialog(this.addDialog);
     }
 }
