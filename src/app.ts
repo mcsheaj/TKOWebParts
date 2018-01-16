@@ -7,9 +7,9 @@ import "./css/sliderDropzone.scss";
 import "es6-promise/auto";
 import * as ko from "knockout";
 import { ImageSliderViewModel, SliderConfig } from "./viewmodels/imageSliderViewModel";
-import { toggleDialog } from "./ko/bindingHandlers";
+import { initBindingHandlers } from "./ko/bindingHandlers";
 
-ko.bindingHandlers.toggleDialog = toggleDialog;
+initBindingHandlers();
 
 function getWebPartId(elem: Element): string {
     if(elem.id.indexOf("WebPart") === 0) return elem.id;
