@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import { ajax, Options } from "../utils/ajax";
 import { fetchx } from "../utils/fetchx";
 
 interface Callback {
