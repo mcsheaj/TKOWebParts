@@ -16,7 +16,7 @@ interface CompleteCallback {
 interface FileDropZoneConfig {
     element: Element;
     fileCallback: (filename: string, buffer: any, complete: CompleteCallback) => void;
-    completeCallback?: () => void;
+    completeCallback: () => void;
 }
 
 class FileDropzone {
