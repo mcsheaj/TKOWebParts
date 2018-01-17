@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
 export const slide = {
-    update: (el: HTMLElement, v: () => any, all: any, dep: any, ctx: KnockoutBindingContext) : void => {
+    update: (el: HTMLElement, v: () => any) : void => {
         let selected = v();
         if(selected) {
             let wrapper = el.parentElement;

@@ -1,4 +1,16 @@
-// Ravishanker Kusuma - Drag and Drop File Upload jQuery Example - http://hayageek.com/drag-and-drop-file-upload-jquery/
+import * as ko from "knockout";
+
+export const fileDropzone = {
+    update: (el: HTMLElement, v: () => any, all: any, dep: any, ctx: KnockoutBindingContext) : void => {
+        let options = v();
+        this.dropzone = new FileDropzone({
+            element: el,
+            fileCallback: options.processFile,
+            completeCallback: options.complete,
+        });
+    }
+};
+
 export interface CompleteCallback {
     (): void;
 }
@@ -9,7 +21,7 @@ export interface FileDropZoneConfig {
     completeCallback?: () => void;
 }
 
-export class FileDropzone {
+class FileDropzone {
     element: Element;
     uploading: number;
     fileArray: any[];
@@ -97,3 +109,4 @@ export class FileDropzone {
         reader.readAsArrayBuffer(file);
     }
 }
+

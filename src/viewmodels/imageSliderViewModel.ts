@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import { ImageService } from "../api/imageService";
-import { FileDropzone, CompleteCallback } from "../utils/fileDropzone";
+import { CompleteCallback } from "../ko/fileDropzoneBinding";
 import { protectedObservable, KnockoutProtectedObservable } from "../ko/protectedObservable";
 
 // web part configuration
@@ -10,7 +10,7 @@ export interface SliderConfig {
 
 // model for a single image.
 export interface Image {
-    Url: KnockoutObservable<string>;
+    Url: string;
     Title: KnockoutProtectedObservable<string>;
     Description: KnockoutProtectedObservable<string>;
     Id: number;
@@ -31,9 +31,7 @@ export class ImageSliderViewModel {
     deleteDialog: KnockoutObservable<boolean>;
 
     //slider: Slider;
-    dropzone: FileDropzone;
     service: ImageService;
-    nextIndex: number = 0;
 
     /*
     Load the images from the source library into the model.
@@ -54,18 +52,11 @@ export class ImageSliderViewModel {
 
         // read in images and push them to this.images
         this.readImages();
-
-        // initialize the drop zone for adding images
-        this.dropzone = new FileDropzone({
-            element: document.getElementById(this.webPartId).querySelector(".dragandrophandler"),
-            fileCallback: this.createImage,
-            completeCallback: (): void => this.toggleDialog(this.addDialog),
-        });
     }
 
     /*
-    Create a new image in the source library from data passed from the drop
-    zone, and add it to the model. Callback for FileDropzone.
+    Callback for FileDropzone binding.  Create a new image in the source library from data passed 
+    from the drop zone binding, and add it to the model. 
     */
     createImage = (filename: string, buffer: any, complete: CompleteCallback): void => {
         this.service.createImage(filename,
@@ -75,15 +66,12 @@ export class ImageSliderViewModel {
                     // construct the new image
                     let image = <Image>{
                         Id: json.ListItemAllFields.Id,
-                        Url: ko.observable(_spPageContextInfo.webServerRelativeUrl +
-                            this.config.listTitle + "/" + filename),
+                        Url: _spPageContextInfo.webServerRelativeUrl + this.config.listTitle + "/" + filename,
                         Title: protectedObservable(""),
                         Description: protectedObservable(""),
                         FileRef: _spPageContextInfo.webServerRelativeUrl +
                             this.config.listTitle + "/" + filename
                     };
-
-                    this.nextIndex = -1;
 
                     // push it to the array
                     this.images.push(image);
@@ -92,6 +80,13 @@ export class ImageSliderViewModel {
                 // tell the drop zone we're finished
                 complete();
             });
+    }
+
+    /*
+    Callback for FileDropzone binding.  Close the add dialog when all files have been uploaded.
+    */
+    uploadComplete = (): void => {
+        this.toggleDialog(this.addDialog);
     }
 
     /*
