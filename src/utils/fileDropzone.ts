@@ -4,8 +4,7 @@ export interface CompleteCallback {
 }
 
 export interface FileDropZoneConfig {
-    root: Element;
-    selector: string;
+    element: Element;
     fileCallback: (filename: string, buffer: any, complete: CompleteCallback) => void;
     completeCallback?: () => void;
 }
@@ -16,7 +15,7 @@ export class FileDropzone {
     fileArray: any[];
 
     constructor(public config: FileDropZoneConfig) {
-        this.element = config.root.querySelector(config.selector);
+        this.element = config.element;
         this.uploading = 0;
         this.fileArray = [];
         if (this.element) {

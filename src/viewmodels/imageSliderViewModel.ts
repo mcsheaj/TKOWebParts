@@ -1,6 +1,5 @@
 import * as ko from "knockout";
 import { ImageService } from "../api/imageService";
-import { Slider } from "../utils/slider";
 import { FileDropzone, CompleteCallback } from "../utils/fileDropzone";
 import { protectedObservable, KnockoutProtectedObservable } from "../ko/protectedObservable";
 
@@ -58,24 +57,10 @@ export class ImageSliderViewModel {
 
         // initialize the drop zone for adding images
         this.dropzone = new FileDropzone({
-            root: document.getElementById(this.webPartId),
-            selector: ".dragandrophandler",
+            element: document.getElementById(this.webPartId).querySelector(".dragandrophandler"),
             fileCallback: this.createImage,
             completeCallback: (): void => this.toggleDialog(this.addDialog),
         });
-    }
-
-    /*
-    The slider needs to be fully formed in the DOM before it can be
-    initialized.
-    */
-    applySlider = (): void => {
-        /*
-        this.slider = new Slider(
-            document.getElementById(this.webPartId),
-            ".slider",
-            this.nextIndex);
-            */
     }
 
     /*
@@ -179,11 +164,11 @@ export class ImageSliderViewModel {
         let index = this.selected();
         this.service.deleteImage(
             this.images()[index].FileRef, (json: any) => {
+                // select the previous image
+                this.selected(index > 0 ? index - 1 : this.images().length - 2);
+
                 // remove the deleted index from the model
                 let deleted = this.images.splice(index, 1);
-
-                // re-initialize the slider
-                this.selected(index > 0 ? index - 1 : this.images().length - 1);
 
                 // close the dialog
                 this.toggleDialog(this.deleteDialog);
