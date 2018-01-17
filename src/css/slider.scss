@@ -1,10 +1,10 @@
-$height: 550px;
+$height: 552px;
 $width: 800px;
 
 .image-slider-outer {
     .slider {
         margin: 2em auto;
-        width: $width;
+        width: 802px;
         overflow: hidden;
 
         .slider-wrapper {
@@ -20,6 +20,7 @@ $width: 800px;
             height: $height;
             position: relative;
             overflow: hidden;
+            border: 1px solid slategray;
 
             img {
                 position: absolute;

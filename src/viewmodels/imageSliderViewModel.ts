@@ -24,14 +24,14 @@ View model for the image slider.
 export class ImageSliderViewModel {
     webPartId: string;
     images: KnockoutObservableArray<Image>;
-    selected: KnockoutObservable<Image>;
+    selected: KnockoutObservable<number>;
 
     // dialog observables
     addDialog: KnockoutObservable<boolean>;
     editDialog: KnockoutObservable<boolean>;
     deleteDialog: KnockoutObservable<boolean>;
 
-    slider: Slider;
+    //slider: Slider;
     dropzone: FileDropzone;
     service: ImageService;
     nextIndex: number = 0;
@@ -46,12 +46,7 @@ export class ImageSliderViewModel {
 
         // initialize observables
         this.images = ko.observableArray([]);
-        this.selected = ko.observable(<Image>{
-            Url: ko.observable(""),
-            Title: ko.observable(""),
-            Description: ko.observable(""),
-            FileRef: ""
-        });
+        this.selected = ko.observable(0);
 
         // initialize dialog observables
         this.addDialog = ko.observable(false);
@@ -66,7 +61,7 @@ export class ImageSliderViewModel {
             root: document.getElementById(this.webPartId),
             selector: ".dragandrophandler",
             fileCallback: this.createImage,
-            completeCallback: this.closeAddDialog,
+            completeCallback: (): void => this.toggleDialog(this.addDialog),
         });
     }
 
@@ -75,10 +70,12 @@ export class ImageSliderViewModel {
     initialized.
     */
     applySlider = (): void => {
+        /*
         this.slider = new Slider(
             document.getElementById(this.webPartId),
             ".slider",
             this.nextIndex);
+            */
     }
 
     /*
@@ -139,7 +136,7 @@ export class ImageSliderViewModel {
                     this.images.valueHasMutated();
 
                     // select the first image
-                    this.selected(this.images()[0]);
+                    this.selected(0);
                 }
             });
     }
@@ -148,8 +145,7 @@ export class ImageSliderViewModel {
     Update the title/description of the current image in the source library.
     */
     updateImage = (): void => {
-        let index = this.slider.getSelectedIndex();
-        let current = this.images()[index];
+        let current = this.images()[this.selected()];
         this.service.updateImage(current.Id,
             { Title: current.Title(), Description: current.Description() },
             (json: any) => {
@@ -167,8 +163,7 @@ export class ImageSliderViewModel {
     any changes.
     */
     resetImage = (): void => {
-        let index = this.slider.getSelectedIndex();
-        let current = this.images()[index];
+        let current = this.images()[this.selected()];
 
         // reset the observables
         current.Title.reset();
@@ -181,14 +176,14 @@ export class ImageSliderViewModel {
     Delete the currently displayed image from the source library and the model.
     */
     deleteImage = (): void => {
-        let index = this.slider.getSelectedIndex();
+        let index = this.selected();
         this.service.deleteImage(
             this.images()[index].FileRef, (json: any) => {
                 // remove the deleted index from the model
                 let deleted = this.images.splice(index, 1);
 
                 // re-initialize the slider
-                this.slider.init(index - 1);
+                this.selected(index > 0 ? index - 1 : this.images().length - 1);
 
                 // close the dialog
                 this.toggleDialog(this.deleteDialog);
@@ -196,18 +191,16 @@ export class ImageSliderViewModel {
     }
 
     /*
-    Helper callback to launch one of the dialogs.
+    Select and image by 0 based index.F
     */
-    toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
-        let index = this.slider.getSelectedIndex();
-        this.selected(this.images()[index]);
-        dialog(!dialog());
+    select = (index: number) : void => {
+        this.selected(index);
     }
 
     /*
-    Close the add dialog when all images have been updated. Callback for FileDropzone.
+    Helper callback to launch one of the dialogs.
     */
-    closeAddDialog = (): void => {
-        this.toggleDialog(this.addDialog);
+    toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
+        dialog(!dialog());
     }
 }
