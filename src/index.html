@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="slider-nav" data-bind='foreach: { data: images, afterRender: applySlider }'>
+        <div class="slider-nav" data-bind='foreach: { data: images }'>
             <a href="#" data-bind='click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }'></a>
         </div>
         <div class="slider-menu" data-bind='visible: images().length > 0' style="display:none;">
