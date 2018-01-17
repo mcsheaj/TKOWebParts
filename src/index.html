@@ -13,6 +13,7 @@
 <body>
 
     <div class="image-slider-outer">
+        <div class="banner">&nbsp;</div>
         <div class="slider" data-bind='visible: images().length > 0' style="display:none;">
             <div class="slider-wrapper" data-bind='foreach: images'>
                 <div class="slide" data-bind="slide: $root.selected() === $index()">
@@ -38,7 +39,7 @@
                 <div class="dragandrophandler" 
                     data-bind="fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }">
                     <div class="draganddropbusy" style="display:none">
-                        <img src="/sites/csrdemos/_layouts/images/progress.gif">
+                        &nbsp;
                     </div>
                     <div class="draganddroplabel">Drag & Drop Images Here...</div>
                 </div>
