@@ -36,8 +36,7 @@
         <div class="addSliderImages modalDialog" data-bind='toggleDialog: addDialog(); visible: images().length === 0' style="display:none;">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
-                <div class="dragandrophandler" 
-                    data-bind="fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }">
+                <div class="dragandrophandler" data-bind="fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }">
                     <div class="draganddropbusy" style="display:none">
                         &nbsp;
                     </div>
@@ -50,12 +49,10 @@
                 <a data-bind='click: toggleDialog.bind($root, editDialog)' href="#" title="Close" class="close">X</a>
                 <h2>Edit Image</h2>
                 <span class="sliderFormLabel">Title</span>
-                <input type="text" class="titleInput"
-                    data-bind="value: $root.images().length > 0 ? $root.images()[selected()].Title : ''" />
+                <input type="text" class="titleInput" data-bind="value: $root.images().length > 0 ? $root.images()[selected()].Title : ''"/>
                 <br />
                 <span class="sliderFormLabel">Description</span>
-                <textarea rows="10" cols="55" class="descriptionInput"
-                    data-bind="value: $root.images().length > 0 ? $root.images()[selected()].Description : ''"></textarea>
+                <textarea rows="10" cols="55" class="descriptionInput" data-bind="value: $root.images().length > 0 ? $root.images()[selected()].Description : ''"></textarea>
                 <br />
                 <button type="button" data-bind='click: updateImage' class="sliderButton editSave">Ok</button>
                 <button type="button" data-bind='click: resetImage' class="sliderButton editReset">Cancel</button>
@@ -67,6 +64,17 @@
                 <h2>Delete Confirmation</h2>
                 <p>Are you sure you want to delete the current image?</p>
                 <button type="button" data-bind='click: deleteImage' class="sliderButton delete">Delete</button>
+            </div>
+        </div>
+        <div class="editProperties modalDialog" data-bind='toggleDialog: editProperties()' style="display:none">
+            <div class="modalDialog-inner">
+                <a data-bind='click: toggleDialog.bind($root, editProperties)' href="#" title="Close" class="close">X</a>
+                <h2>Edit Web Part Properties</h2>
+                <span class="sliderFormLabel">List Title</span>
+                <input type="text" class="titleInput" data-bind="value: listTitle"/>
+                <br />
+                <button type="button" data-bind='click: settings.bind($root, true)' class="sliderButton editSave">Ok</button>
+                <button type="button" data-bind='click: settings.bind($root, false)' class="sliderButton editReset">Cancel</button>
             </div>
         </div>
         <script type='text/javascript' src='/Style Library/tkoWebPart/pnp-ww.js' 

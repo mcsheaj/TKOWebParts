@@ -28,6 +28,10 @@ export class ImageSliderViewModel {
     addDialog: KnockoutObservable<boolean>;
     editDialog: KnockoutObservable<boolean>;
     deleteDialog: KnockoutObservable<boolean>;
+    editSettings: KnockoutObservable<boolean>;
+
+    listTitle: KnockoutProtectedObservable<string>;
+    saveConfig: KnockoutObservable<boolean>;
 
     //slider: Slider;
     service: ImageService;
@@ -43,6 +47,10 @@ export class ImageSliderViewModel {
         // initialize observables
         this.images = ko.observableArray([]);
         this.selected = ko.observable(0);
+
+        // initialize settings observables
+        this.listTitle = protectedObservable(config.listTitle);
+        this.saveConfig = ko.observable(false);
 
         // initialize dialog observables
         this.addDialog = ko.observable(false);
@@ -181,5 +189,17 @@ export class ImageSliderViewModel {
     */
     toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
         dialog(!dialog());
+    }
+
+    settings = (update: boolean): void => {
+        if(update) {
+            if(this.listTitle.hasChanged()) {
+                this.saveConfig(true);
+                this.listTitle.commit();
+            }
+        }
+        else {
+            this.listTitle.reset();
+        }
     }
 }

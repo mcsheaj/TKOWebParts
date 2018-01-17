@@ -3,6 +3,7 @@ import * as ko from "knockout";
 export interface KnockoutProtectedObservable<T> extends KnockoutObservable<T> {
     commit() : void;
     reset() : void;
+    hasChanged() : boolean;
 }
 
 export function protectedObservable(value: any) : KnockoutProtectedObservable<any> {
@@ -16,6 +17,10 @@ export function protectedObservable(value: any) : KnockoutProtectedObservable<an
     current.reset = function() : void {
         current(original);
     };
+
+    current.hasChanged = function() : boolean {
+        return original !== current();
+    }
 
     return current;
 }
