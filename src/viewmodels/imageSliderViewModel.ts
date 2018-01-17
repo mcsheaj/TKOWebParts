@@ -1,6 +1,5 @@
 import * as ko from "knockout";
 import { ImageService } from "../api/imageService";
-import { CompleteCallback } from "../ko/fileDropzoneBinding";
 import { protectedObservable, KnockoutProtectedObservable } from "../ko/protectedObservable";
 
 // web part configuration
@@ -58,7 +57,7 @@ export class ImageSliderViewModel {
     Callback for FileDropzone binding.  Create a new image in the source library from data passed 
     from the drop zone binding, and add it to the model. 
     */
-    createImage = (filename: string, buffer: any, complete: CompleteCallback): void => {
+    createImage = (filename: string, buffer: any, complete: () => any): void => {
         this.service.createImage(filename,
             buffer,
             (json: any) => {

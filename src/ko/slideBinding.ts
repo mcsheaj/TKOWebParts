@@ -1,8 +1,6 @@
-import * as ko from "knockout";
-
 export const slide = {
     update: (el: HTMLElement, v: () => any) : void => {
-        let selected = v();
+        let selected : number = v();
         if(selected) {
             let wrapper = el.parentElement;
             wrapper.style.left = "-" + el.offsetLeft + "px";

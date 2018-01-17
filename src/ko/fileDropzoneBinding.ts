@@ -1,7 +1,5 @@
-import * as ko from "knockout";
-
 export const fileDropzone = {
-    update: (el: HTMLElement, v: () => any, all: any, dep: any, ctx: KnockoutBindingContext) : void => {
+    update: (el: HTMLElement, v: () => any) : void => {
         let options = v();
         this.dropzone = new FileDropzone({
             element: el,
@@ -11,11 +9,11 @@ export const fileDropzone = {
     }
 };
 
-export interface CompleteCallback {
+interface CompleteCallback {
     (): void;
 }
 
-export interface FileDropZoneConfig {
+interface FileDropZoneConfig {
     element: Element;
     fileCallback: (filename: string, buffer: any, complete: CompleteCallback) => void;
     completeCallback?: () => void;
