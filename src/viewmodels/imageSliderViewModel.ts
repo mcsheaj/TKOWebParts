@@ -6,6 +6,7 @@ import { Widget } from "../ko/widgetSettingsBinding";
 // web part configuration
 export interface SliderConfig {
     listTitle: string;
+    interval: number;
 }
 
 // model for a single image.
@@ -32,6 +33,7 @@ export class ImageSliderViewModel implements Widget {
     editSettings: KnockoutObservable<boolean>;
 
     listTitle: KnockoutProtectedObservable<string>;
+    interval: KnockoutProtectedObservable<number>;
     configChanged: KnockoutObservable<boolean>;
     inEditMode: KnockoutObservable<boolean>;
 
@@ -54,6 +56,7 @@ export class ImageSliderViewModel implements Widget {
 
         // initialize settings observables
         this.listTitle = protectedObservable(config.listTitle);
+        this.interval = protectedObservable(config.interval);
         this.configChanged = ko.observable(false);
         this.inEditMode = ko.observable(false);
 
@@ -202,9 +205,10 @@ export class ImageSliderViewModel implements Widget {
 
     settings = (update: boolean): void => {
         if (update) {
-            if (this.listTitle.hasChanged()) {
+            if (this.listTitle.hasChanged() || this.interval.hasChanged()) {
                 this.configChanged(true);
                 this.listTitle.commit();
+                this.interval.commit();
             }
         }
         else {
@@ -214,10 +218,9 @@ export class ImageSliderViewModel implements Widget {
     }
 
     persistentConfig = (): string => {
-        let config: any = {};
-        config.listTitle = this.listTitle();
-        this.listTitle.commit();
-        return JSON.stringify(config);
+        this.config.listTitle = this.listTitle();
+        this.config.interval = this.interval();
+        return JSON.stringify(this.config);
     }
 
     mouseOver = (): void => {
@@ -228,7 +231,7 @@ export class ImageSliderViewModel implements Widget {
     }
 
     mouseOut = (): void => {
-        if (this.timerId === 0) {
+        if (this.timerId === 0 && this.config.interval > 0) {
             this.timerId = setInterval(() => {
                 if (this.selected() + 1 >= this.images().length) {
                     this.selected(0);
@@ -236,7 +239,7 @@ export class ImageSliderViewModel implements Widget {
                 else {
                     this.selected(this.selected() + 1);
                 }
-            }, 10000);
+            }, this.config.interval);
         }
     }
 }

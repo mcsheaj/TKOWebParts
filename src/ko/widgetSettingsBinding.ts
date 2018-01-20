@@ -3,7 +3,7 @@ import * as ko from "knockout";
 export interface Widget {
     webPartId: string;
     inEditMode: KnockoutObservable<boolean>;
-    persistentConfig() : string;
+    persistentConfig(): string;
 }
 
 export const widgetSettings = {
@@ -13,14 +13,16 @@ export const widgetSettings = {
 
         // tell the widget if we're in edit mode
         let editable = isInEditMode(widget);
-        if(editable) {
+        if (editable) {
             widget.inEditMode(editable);
         }
 
         // hide the edit snippet link
-        let anchor = <HTMLElement>document.querySelector("a[title='Edit Snippet']");
-        if(anchor) {
-            anchor.style.display = "none";
+        if (window.location.search.toLowerCase().indexOf("showeditsnippet=true") < 0) {
+            let anchor = <HTMLElement>document.querySelector("a[title='Edit Snippet']");
+            if (anchor) {
+                anchor.style.display = "none";
+            }
         }
     },
 
