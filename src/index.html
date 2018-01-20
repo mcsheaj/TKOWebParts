@@ -24,9 +24,7 @@
             Click the plus sign to add some images to your library.
         </div>
         <div data-bind='visible: hasImages' class="slider">
-            <div 
-                data-bind='foreach: images, visible: hasImages' 
-                class="slider-wrapper">
+            <div data-bind='foreach: images, visible: hasImages' class="slider-wrapper">
                 <div data-bind='slider: $root.selected() === $index()' class="slide">
                     <img data-bind='attr: { src: Url, alt: Title }' />
                     <div data-bind='visible: Title' class="caption">
@@ -36,9 +34,7 @@
                 </div>
             </div>
         </div>
-        <div 
-            data-bind='foreach: { data: images }, visible: hasImages' 
-            class="slider-nav">
+        <div data-bind='foreach: { data: images }, visible: hasImages' class="slider-nav">
             <a 
                 data-bind='click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }' 
                 href="#"></a>
@@ -77,14 +73,10 @@
                 <a data-bind='click: toggleDialog.bind($root, editDialog)' href="#" title="Close" class="close">X</a>
                 <h2>Edit Image</h2>
                 <span class="sliderFormLabel">Title</span>
-                <input 
-                    data-bind='value: $root.currentImage().Title' 
-                    type="text" class="titleInput" />
+                <input data-bind='value: $root.currentImage().Title' type="text" class="titleInput" />
                 <br />
                 <span class="sliderFormLabel">Description</span>
-                <textarea 
-                    data-bind='value: $root.currentImage().Description' 
-                    rows="10" cols="55" class="descriptionInput"></textarea>
+                <textarea data-bind='value: $root.currentImage().Description' rows="10" cols="55" class="descriptionInput"></textarea>
                 <br />
                 <button data-bind='click: updateImage.bind($root, true)' type="button" class="sliderButton editSave">Ok</button>
                 <button data-bind='click: updateImage.bind($root, false)' type="button" class="sliderButton editReset">Cancel</button>
