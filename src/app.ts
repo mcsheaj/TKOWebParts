@@ -22,7 +22,9 @@ let tkoWebPart = {
     imageSlider: {
         init: function (elem: Element, json: string): void {
             let config = <SliderConfig>JSON.parse(json);
-            ko.applyBindings(new ImageSliderViewModel(getWebPartId(elem), config), elem);
+            let webPartId = getWebPartId(elem);
+            let webPart = document.getElementById(webPartId);
+            ko.applyBindings(new ImageSliderViewModel(webPartId, config), webPart);
         }
     },
 
