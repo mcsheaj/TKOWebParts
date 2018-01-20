@@ -20,7 +20,7 @@ export function protectedObservable(value: any) : KnockoutProtectedObservable<an
 
     current.hasChanged = function() : boolean {
         return original !== current();
-    }
+    };
 
     return current;
 }

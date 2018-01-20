@@ -12,7 +12,7 @@
 
 <body>
 
-    <div class="image-slider-outer">
+    <div class="image-slider-outer" data-bind="widgetSettings: inEditMode() && configChanged()">
         <div class="banner">&nbsp;</div>
         <div class="slider" data-bind='visible: images().length > 0' style="display:none;">
             <div class="slider-wrapper" data-bind='foreach: images'>
@@ -32,8 +32,9 @@
             <div title="Add" data-bind='click: toggleDialog.bind($root, addDialog)' class='slider-button add'></div>
             <div title="Edit" data-bind='click: toggleDialog.bind($root, editDialog)' class='slider-button edit'></div>
             <div title="Delete" data-bind='click: toggleDialog.bind($root, deleteDialog)' class='slider-button delete'></div>
+            <div title="Settings" data-bind='click: toggleDialog.bind($root, editSettings), visible: inEditMode()' class='slider-button settings'></div>
         </div>
-        <div class="addSliderImages modalDialog" data-bind='toggleDialog: addDialog(); visible: images().length === 0' style="display:none;">
+        <div class="addSliderImages modalDialog" data-bind='toggleDialog: addDialog(), visible: images().length === 0' style="display:none;">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
                 <div class="dragandrophandler" data-bind="fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }">
@@ -66,10 +67,10 @@
                 <button type="button" data-bind='click: deleteImage' class="sliderButton delete">Delete</button>
             </div>
         </div>
-        <div class="editProperties modalDialog" data-bind='toggleDialog: editSettings()' style="display:none">
+        <div class="editSettings modalDialog" data-bind='toggleDialog: editSettings()' style="display:none">
             <div class="modalDialog-inner">
-                <a data-bind='click: toggleDialog.bind($root, editProperties)' href="#" title="Close" class="close">X</a>
-                <h2>Edit Web Part Properties</h2>
+                <a data-bind='click: toggleDialog.bind($root, editSettings)' href="#" title="Close" class="close">X</a>
+                <h2>Edit Web Part Settings</h2>
                 <span class="sliderFormLabel">List Title</span>
                 <input type="text" class="titleInput" data-bind="value: listTitle"/>
                 <br />

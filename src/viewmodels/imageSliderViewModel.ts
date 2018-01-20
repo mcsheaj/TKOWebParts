@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import { ImageService } from "../api/imageService";
 import { protectedObservable, KnockoutProtectedObservable } from "../ko/protectedObservable";
+import { Widget } from "../ko/widgetSettingsBinding";
 
 // web part configuration
 export interface SliderConfig {
@@ -19,7 +20,7 @@ export interface Image {
 /*
 View model for the image slider.
 */
-export class ImageSliderViewModel {
+export class ImageSliderViewModel implements Widget {
     webPartId: string;
     images: KnockoutObservableArray<Image>;
     selected: KnockoutObservable<number>;
@@ -31,7 +32,8 @@ export class ImageSliderViewModel {
     editSettings: KnockoutObservable<boolean>;
 
     listTitle: KnockoutProtectedObservable<string>;
-    saveConfig: KnockoutObservable<boolean>;
+    configChanged: KnockoutObservable<boolean>;
+    inEditMode: KnockoutObservable<boolean>;
 
     //slider: Slider;
     service: ImageService;
@@ -50,12 +52,14 @@ export class ImageSliderViewModel {
 
         // initialize settings observables
         this.listTitle = protectedObservable(config.listTitle);
-        this.saveConfig = ko.observable(false);
+        this.configChanged = ko.observable(false);
+        this.inEditMode = ko.observable(false);
 
         // initialize dialog observables
         this.addDialog = ko.observable(false);
         this.editDialog = ko.observable(false);
         this.deleteDialog = ko.observable(false);
+        this.editSettings = ko.observable(false);
 
         // read in images and push them to this.images
         this.readImages();
@@ -180,7 +184,7 @@ export class ImageSliderViewModel {
     /*
     Select and image by 0 based index.F
     */
-    select = (index: number) : void => {
+    select = (index: number): void => {
         this.selected(index);
     }
 
@@ -192,14 +196,22 @@ export class ImageSliderViewModel {
     }
 
     settings = (update: boolean): void => {
-        if(update) {
-            if(this.listTitle.hasChanged()) {
-                this.saveConfig(true);
+        if (update) {
+            if (this.listTitle.hasChanged()) {
+                this.configChanged(true);
                 this.listTitle.commit();
             }
         }
         else {
             this.listTitle.reset();
         }
+        this.editSettings(false);
+    }
+
+    persistentConfig = (): string => {
+        let config: any = {};
+        config.listTitle = this.listTitle();
+        this.listTitle.commit();
+        return JSON.stringify(config);
     }
 }
