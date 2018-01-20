@@ -1,7 +1,11 @@
 $height: 552px;
 $width: 800px;
 
-.image-slider-outer {
+.slider-init {
+    color: maroon;
+}
+
+.image-slider-outer {    
     .slider {
         margin: 2em auto;
         width: 802px;
@@ -9,7 +13,6 @@ $width: 800px;
 
         .slider-wrapper {
             width: 99999px;
-            height: $height;
             position: relative;
             transition: left 400ms linear;
         }

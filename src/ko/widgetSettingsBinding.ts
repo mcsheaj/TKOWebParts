@@ -12,10 +12,7 @@ export const widgetSettings = {
         let widget = <Widget>ctx.$root;
 
         // tell the widget if we're in edit mode
-        let editable = isInEditMode(widget);
-        if (editable) {
-            widget.inEditMode(editable);
-        }
+        widget.inEditMode(isInEditMode(widget));
 
         // hide the edit snippet link
         if (window.location.search.toLowerCase().indexOf("showeditsnippet=true") < 0) {
@@ -30,10 +27,13 @@ export const widgetSettings = {
         let value = v();
         let widget = <Widget>ctx.$root;
 
+        // save the widget's persistent config for save
+        saveChanges(widget);
+
         if (value) {
             let okBtn = document.querySelector("input[name$='AppBtn'],input[name$='OKBtn']");
             okBtn.addEventListener("click", function () {
-                // save the widget's persistent config
+                // save the widget's persistent config again on ok
                 saveChanges(widget);
             }, false);
         }

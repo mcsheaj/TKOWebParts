@@ -12,31 +12,59 @@
 
 <body>
 
-    <div class="image-slider-outer" data-bind="widgetSettings: inEditMode() && configChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }">
-        <div class="slider">
-            <div class="slider-wrapper" data-bind='foreach: images'>
-                <div class="slide" data-bind="slide: $root.selected() === $index()">
+    <div data-bind='visible: listTitle().length === 0' class="slider-init" style="display:none">
+        Edit this web part and select a picture library to begin showing pictures.
+    </div>
+    <div 
+        data-bind='widgetSettings: inEditMode() && configChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }'
+        class="image-slider-outer">
+        <div 
+            data-bind="visible: listTitle().length > 0 && images().length === 0" 
+            class="slider-init" style="display:none">
+            Click the plus sign to add some images to your library.
+        </div>
+        <div data-bind='visible: listTitle().length > 0' class="slider">
+            <div 
+                data-bind='foreach: images, visible: images().length > 0' 
+                class="slider-wrapper">
+                <div data-bind='slider: $root.selected() === $index()' class="slide">
                     <img data-bind='attr: { src: Url, alt: Title, "data-slide": $index() }' />
-                    <div class="caption" data-bind="visible: Title">
-                        <p class="caption" data-bind='text: Title'></p>
-                        <p class="description" data-bind='text: Description'></p>
+                    <div data-bind='visible: Title' class="caption">
+                        <p data-bind='text: Title' class="caption"></p>
+                        <p data-bind='text: Description' class="description"></p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="slider-nav" data-bind='foreach: { data: images }'>
-            <a href="#" data-bind='click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }'></a>
+        <div 
+            data-bind='foreach: { data: images }, visible: listTitle().length > 0 && images().length > 0' 
+            class="slider-nav">
+            <a 
+                data-bind='click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }' 
+                href="#"></a>
         </div>
         <div class="slider-menu">
-            <div title="Add" data-bind='click: toggleDialog.bind($root, addDialog)' class='slider-button add'></div>
-            <div title="Edit" data-bind='click: toggleDialog.bind($root, editDialog)' class='slider-button edit'></div>
-            <div title="Delete" data-bind='click: toggleDialog.bind($root, deleteDialog)' class='slider-button delete'></div>
-            <div title="Settings" data-bind='click: toggleDialog.bind($root, editSettings), visible: inEditMode()' class='slider-button settings'></div>
+            <div 
+                data-bind='click: toggleDialog.bind($root, addDialog), visible: listTitle().length > 0'
+                title="Add"class="slider-button add"></div>
+            <div 
+                data-bind='click: toggleDialog.bind($root, editDialog), visible: images().length > 0 && listTitle().length > 0' 
+                title="Edit" class="slider-button edit"></div>
+            <div 
+                data-bind='click: toggleDialog.bind($root, deleteDialog), visible: images().length > 0 && listTitle().length > 0' 
+                title="Delete" class="slider-button delete"></div>
+            <div 
+                data-bind='click: toggleDialog.bind($root, editSettings), visible: inEditMode()' 
+                title="Settings" class="slider-button settings"></div>
         </div>
-        <div class="addSliderImages modalDialog" data-bind='toggleDialog: addDialog(), visible: images().length === 0' style="display:none;">
+        <div 
+            data-bind='toggleDialog: addDialog(), visible: images().length === 0' 
+            class="addSliderImages modalDialog" style="display:none;">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
-                <div class="dragandrophandler" data-bind="fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }">
+                <div 
+                    data-bind='fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }' 
+                    class="dragandrophandler">
                     <div class="draganddropbusy" style="display:none">
                         &nbsp;
                     </div>
@@ -44,53 +72,56 @@
                 </div>
             </div>
         </div>
-        <div class="editSliderImage modalDialog" data-bind='toggleDialog: editDialog()' style="display:none">
+        <div data-bind='toggleDialog: editDialog()' class="editSliderImage modalDialog" style="display:none">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, editDialog)' href="#" title="Close" class="close">X</a>
                 <h2>Edit Image</h2>
                 <span class="sliderFormLabel">Title</span>
-                <input type="text" class="titleInput" data-bind="value: $root.images().length > 0 ? $root.images()[selected()].Title : ''"
-                />
+                <input 
+                    data-bind='value: $root.images().length > 0 ? $root.images()[selected()].Title : ""' 
+                    type="text" class="titleInput" />
                 <br />
                 <span class="sliderFormLabel">Description</span>
-                <textarea rows="10" cols="55" class="descriptionInput" data-bind="value: $root.images().length > 0 ? $root.images()[selected()].Description : ''"></textarea>
+                <textarea 
+                    data-bind='value: $root.images().length > 0 ? $root.images()[selected()].Description : ""' 
+                    rows="10" cols="55" class="descriptionInput"></textarea>
                 <br />
-                <button type="button" data-bind='click: updateImage' class="sliderButton editSave">Ok</button>
-                <button type="button" data-bind='click: resetImage' class="sliderButton editReset">Cancel</button>
+                <button data-bind='click: updateImage' type="button" class="sliderButton editSave">Ok</button>
+                <button data-bind='click: resetImage' type="button" class="sliderButton editReset">Cancel</button>
             </div>
         </div>
-        <div class="deleteSliderImage modalDialog" data-bind='toggleDialog: deleteDialog()' style="display:none">
+        <div data-bind='toggleDialog: deleteDialog()' class="deleteSliderImage modalDialog" style="display:none">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, deleteDialog)' href="#" title="Close" class="close">X</a>
                 <h2>Delete Confirmation</h2>
                 <p>Are you sure you want to delete the current image?</p>
-                <button type="button" data-bind='click: deleteImage' class="sliderButton delete">Delete</button>
+                <button data-bind='click: deleteImage' type="button" class="sliderButton delete">Delete</button>
             </div>
         </div>
-        <div class="editSettings modalDialog" data-bind='toggleDialog: editSettings()' style="display:none">
+        <div data-bind='toggleDialog: editSettings()' class="editSettings modalDialog" style="display:none">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, editSettings)' href="#" title="Close" class="close">X</a>
                 <h2>Edit Web Part Settings</h2>
                 <div>
                     <span class="sliderFormLabel">List Title</span>
-                    <input type="text" class="titleInput" data-bind="value: listTitle" />
+                    <input data-bind='value: listTitle' type="text" class="titleInput" />
                 </div>
                 <div>
                     <span class="sliderFormLabel">Interval</span>
-                    <input type="text" class="input" data-bind="value: interval" />
+                    <input data-bind='value: interval' type="text" class="input" />
                 </div>
                 <br />
-                <button type="button" data-bind='click: settings.bind($root, true)' class="sliderButton editSave">Ok</button>
-                <button type="button" data-bind='click: settings.bind($root, false)' class="sliderButton editReset">Cancel</button>
+                <button data-bind='click: settings.bind($root, true)' class="sliderButton editSave" type="button">Ok</button>
+                <button data-bind='click: settings.bind($root, false)' class="sliderButton editReset" type="button">Cancel</button>
             </div>
         </div>
-        <script type='text/javascript' src='/Style Library/tkoWebPart/pnp-ww.js' 
-            ww-appname='ImageSlider' 
-            ww-appbind='tkoWebPart.imageSlider.init'
-            ww-appConfig='{"listTitle": "Pictures", "interval": 0}' 
-            ww-appscripts='[{"src": "/Style Library/tkoWebPart/tkoWebPart.js", "priority":0}]'>
-        </script>
     </div>
+    <script type="text/javascript" src="/Style Library/tkoWebPart/pnp-ww.js" 
+        ww-appname="ImageSlider" 
+        ww-appbind="tkoWebPart.imageSlider.init"
+        ww-appConfig='{ "listTitle": "", "interval": 10000 }' 
+        ww-appscripts='[{"src": "~/tkoWebPart.js", "priority ":0}]'>
+    </script>
 
 </body>
 

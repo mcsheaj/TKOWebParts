@@ -1,4 +1,4 @@
-export const slide = {
+export const slider = {
     update: (el: HTMLElement, v: () => any) : void => {
         let selected : number = v();
         if(selected) {

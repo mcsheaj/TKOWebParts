@@ -78,7 +78,7 @@ export class ImageSliderViewModel implements Widget {
     from the drop zone binding, and add it to the model. 
     */
     createImage = (filename: string, buffer: any, complete: () => any): void => {
-        if(this.listTitle.length === 0) {
+        if(this.listTitle().length === 0) {
             return;
         }
         
@@ -116,7 +116,7 @@ export class ImageSliderViewModel implements Widget {
     Read all images from the source library and push them to the model.
     */
     readImages = (): void => {
-        if(this.listTitle.length === 0) {
+        if(this.listTitle().length === 0) {
             return;
         }
 
@@ -152,7 +152,7 @@ export class ImageSliderViewModel implements Widget {
     Update the title/description of the current image in the source library.
     */
     updateImage = (): void => {
-        if(this.listTitle.length === 0) {
+        if(this.listTitle().length === 0) {
             return;
         }
         
@@ -187,18 +187,21 @@ export class ImageSliderViewModel implements Widget {
     Delete the currently displayed image from the source library and the model.
     */
     deleteImage = (): void => {
-        if(this.listTitle.length === 0) {
+        if(this.listTitle().length === 0) {
             return;
         }
         
         let index = this.selected();
         this.service.deleteImage(
             this.images()[index].FileRef, (json: any) => {
-                // select the previous image
-                this.selected(index > 0 ? index - 1 : this.images().length - 2);
+                // get the previous image index
+                let newIndex = index > 0 ? index - 1 : this.images().length - 2;
 
                 // remove the deleted index from the model
                 let deleted = this.images.splice(index, 1);
+
+                // select the previous index
+                this.selected(newIndex);
 
                 // close the dialog
                 this.toggleDialog(this.deleteDialog);

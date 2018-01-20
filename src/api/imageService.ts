@@ -65,7 +65,7 @@ export class ImageService {
     Update the title/description using the SharePoint RESTful web services.
     */
     updateImage = (id: number, merge: any, callback?: Callback): void => {
-        let serviceUrl = "/_api/Web/Lists/getByTitle('" + this.listTitle + "')/Items(" + id + ")";
+        let serviceUrl = `/_api/Web/Lists/getByTitle('${this.listTitle}')/Items(${id})`;
         let url = _spPageContextInfo.webAbsoluteUrl + serviceUrl;
         let digest = (<HTMLInputElement>document.getElementById("__REQUESTDIGEST")).value;
         fetchx(url, {
@@ -89,7 +89,7 @@ export class ImageService {
     Delete an image using SharePoint RESTful web services.
      */
     deleteImage = (serverRelativeUrl: string, callback?: Callback): void => {
-        let serviceUrl = "/_api/Web/getFileByServerRelativeUrl('" + serverRelativeUrl + "')";
+        let serviceUrl = `/_api/Web/getFileByServerRelativeUrl('${serverRelativeUrl}')`;
         let url = _spPageContextInfo.webAbsoluteUrl + serviceUrl;
 
         fetchx(url, {
