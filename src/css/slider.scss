@@ -20,7 +20,10 @@ $width: 800px;
             height: $height;
             position: relative;
             overflow: hidden;
-            border: 1px solid slategray;
+            border-top: 1px solid slategray;
+            border-bottom: 1px solid slategray;
+            border-left: 1px solid slategray;
+            border-right: 2px solid slategray;
 
             img {
                 position: absolute;
