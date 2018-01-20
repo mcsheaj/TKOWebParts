@@ -15,16 +15,14 @@
     <div data-bind='visible: !listTitle()' class="slider-init" style="display:none">
         Edit this web part and select a picture library to begin showing pictures.
     </div>
+    <div data-bind='visible: !hasImages()' class="slider-init" style="display:none">
+        Click the plus sign to add some images to your library.
+    </div>
     <div 
         data-bind='widgetSettings: needToSave(), event: { mouseover: mouseOver, mouseout: mouseOut }'
         class="image-slider-outer">
-        <div 
-            data-bind="visible: listTitle().length > 0 && images().length === 0" 
-            class="slider-init" style="display:none">
-            Click the plus sign to add some images to your library.
-        </div>
-        <div data-bind='visible: hasImages' class="slider">
-            <div data-bind='foreach: images, visible: hasImages' class="slider-wrapper">
+        <div data-bind='visible: $root.hasImages()' class="slider">
+            <div data-bind='foreach: images' class="slider-wrapper">
                 <div data-bind='slider: $root.selected() === $index()' class="slide">
                     <img data-bind='attr: { src: Url, alt: Title }' />
                     <div data-bind='visible: Title' class="caption">
@@ -34,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div data-bind='foreach: { data: images }, visible: hasImages' class="slider-nav">
+        <div data-bind='foreach: { data: images }, visible: $root.hasImages()' class="slider-nav">
             <a 
                 data-bind='click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }' 
                 href="#"></a>
@@ -44,17 +42,17 @@
                 data-bind='click: toggleDialog.bind($root, addDialog), visible: listTitle().length > 0'
                 title="Add"class="slider-button add"></div>
             <div 
-                data-bind='click: toggleDialog.bind($root, editDialog), visible: hasImages()' 
+                data-bind='click: toggleDialog.bind($root, editDialog), visible: $root.hasImages()' 
                 title="Edit" class="slider-button edit"></div>
             <div 
-                data-bind='click: toggleDialog.bind($root, deleteDialog), visible: hasImages()' 
+                data-bind='click: toggleDialog.bind($root, deleteDialog), visible: $root.hasImages()' 
                 title="Delete" class="slider-button delete"></div>
             <div 
-                data-bind='click: toggleDialog.bind($root, editSettings), visible: inEditMode()' 
+                data-bind='click: toggleDialog.bind($root, editSettings), visible: $root.inEditMode()' 
                 title="Settings" class="slider-button settings"></div>
         </div>
         <div 
-            data-bind='toggleDialog: addDialog(), visible: hasImages()' 
+            data-bind='toggleDialog: addDialog(), visible: $root.hasImages()' 
             class="addSliderImages modalDialog" style="display:none;">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>

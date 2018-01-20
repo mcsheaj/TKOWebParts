@@ -1,0 +1,113 @@
+﻿<webParts>
+  <webPart xmlns="http://schemas.microsoft.com/WebPart/v3">
+    <metaData>
+      <type name="Microsoft.SharePoint.WebPartPages.ScriptEditorWebPart, Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+      <importErrorMessage>Cannot import this Web Part.</importErrorMessage>
+    </metaData>
+    <data>
+      <properties>
+        <property name="ExportMode" type="exportmode">All</property>
+        <property name="HelpUrl" type="string" />
+        <property name="Hidden" type="bool">False</property>
+        <property name="Description" type="string">A configurable client-side only web part that can point to any picture library in the current site and display and image slider of the images in it.</property>
+        <property name="Content" type="string">&lt;body&gt;&lt;div data-bind="visible: !listTitle()" class="slider-init" style="display:none"&gt;
+        Edit this web part and select a picture library to begin showing pictures.
+    &lt;/div&gt;
+    &lt;div data-bind="visible: !hasImages()" class="slider-init" style="display:none"&gt;
+        Click the plus sign to add some images to your library.
+    &lt;/div&gt;
+    &lt;div data-bind="widgetSettings: needToSave(), event: { mouseover: mouseOver, mouseout: mouseOut }" class="image-slider-outer"&gt;
+        &lt;div data-bind="visible: $root.hasImages()" class="slider"&gt;
+            &lt;div data-bind="foreach: images" class="slider-wrapper"&gt;
+                &lt;div data-bind="slider: $root.selected() === $index()" class="slide"&gt;
+                    &lt;img data-bind="attr: { src: Url, alt: Title }"&gt;
+                    &lt;div data-bind="visible: Title" class="caption"&gt;
+                        &lt;p data-bind="text: Title" class="caption"&gt;&lt;/p&gt;
+                        &lt;p data-bind="text: Description" class="description"&gt;&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div data-bind="foreach: { data: images }, visible: $root.hasImages()" class="slider-nav"&gt;
+            &lt;a data-bind="click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }" href="#"&gt;&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;div class="slider-menu"&gt;
+            &lt;div data-bind="click: toggleDialog.bind($root, addDialog), visible: listTitle().length &gt; 0" title="Add" class="slider-button add"&gt;&lt;/div&gt;
+            &lt;div data-bind="click: toggleDialog.bind($root, editDialog), visible: $root.hasImages()" title="Edit" class="slider-button edit"&gt;&lt;/div&gt;
+            &lt;div data-bind="click: toggleDialog.bind($root, deleteDialog), visible: $root.hasImages()" title="Delete" class="slider-button delete"&gt;&lt;/div&gt;
+            &lt;div data-bind="click: toggleDialog.bind($root, editSettings), visible: $root.inEditMode()" title="Settings" class="slider-button settings"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div data-bind="toggleDialog: addDialog(), visible: $root.hasImages()" class="addSliderImages modalDialog" style="display:none;"&gt;
+            &lt;div class="modalDialog-inner"&gt;
+                &lt;a data-bind="click: toggleDialog.bind($root, addDialog)" href="#" title="Close" class="close"&gt;X&lt;/a&gt;
+                &lt;div data-bind="fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }" class="dragandrophandler"&gt;
+                    &lt;div class="draganddropbusy" style="display:none"&gt;
+                        &amp;nbsp;
+                    &lt;/div&gt;
+                    &lt;div class="draganddroplabel"&gt;Drag &amp;amp; Drop Images Here...&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div data-bind="toggleDialog: editDialog()" class="editSliderImage modalDialog" style="display:none"&gt;
+            &lt;div class="modalDialog-inner"&gt;
+                &lt;a data-bind="click: toggleDialog.bind($root, editDialog)" href="#" title="Close" class="close"&gt;X&lt;/a&gt;
+                &lt;h2&gt;Edit Image&lt;/h2&gt;
+                &lt;span class="sliderFormLabel"&gt;Title&lt;/span&gt;
+                &lt;input data-bind="value: $root.currentImage().Title" type="text" class="titleInput"&gt;
+                &lt;br&gt;
+                &lt;span class="sliderFormLabel"&gt;Description&lt;/span&gt;
+                &lt;textarea data-bind="value: $root.currentImage().Description" rows="10" cols="55" class="descriptionInput"&gt;&lt;/textarea&gt;
+                &lt;br&gt;
+                &lt;button data-bind="click: updateImage.bind($root, true)" type="button" class="sliderButton editSave"&gt;Ok&lt;/button&gt;
+                &lt;button data-bind="click: updateImage.bind($root, false)" type="button" class="sliderButton editReset"&gt;Cancel&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div data-bind="toggleDialog: deleteDialog()" class="deleteSliderImage modalDialog" style="display:none"&gt;
+            &lt;div class="modalDialog-inner"&gt;
+                &lt;a data-bind="click: toggleDialog.bind($root, deleteDialog)" href="#" title="Close" class="close"&gt;X&lt;/a&gt;
+                &lt;h2&gt;Delete Confirmation&lt;/h2&gt;
+                &lt;p&gt;Are you sure you want to delete the current image?&lt;/p&gt;
+                &lt;button data-bind="click: deleteImage" type="button" class="sliderButton delete"&gt;Delete&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div data-bind="toggleDialog: editSettings()" class="editSettings modalDialog" style="display:none"&gt;
+            &lt;div class="modalDialog-inner"&gt;
+                &lt;a data-bind="click: toggleDialog.bind($root, editSettings)" href="#" title="Close" class="close"&gt;X&lt;/a&gt;
+                &lt;h2&gt;Edit Web Part Settings&lt;/h2&gt;
+                &lt;div&gt;
+                    &lt;span class="sliderFormLabel"&gt;List Title&lt;/span&gt;
+                    &lt;input data-bind="value: listTitle" type="text" class="titleInput"&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                    &lt;span class="sliderFormLabel"&gt;Interval&lt;/span&gt;
+                    &lt;input data-bind="value: interval" type="text" class="input"&gt;
+                &lt;/div&gt;
+                &lt;br&gt;
+                &lt;button data-bind="click: settings.bind($root, true)" class="sliderButton editSave" type="button"&gt;Ok&lt;/button&gt;
+                &lt;button data-bind="click: settings.bind($root, false)" class="sliderButton editReset" type="button"&gt;Cancel&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;script type="text/javascript" src="/Style Library/tkoWebPart/pnp-ww.js" ww-appname="ImageSlider" ww-appbind="tkoWebPart.imageSlider.init" ww-appconfig="{&amp;quot;listTitle&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;interval&amp;quot;:10000}" ww-appscripts="[{&amp;quot;src&amp;quot;: &amp;quot;~/tkoWebPart.js&amp;quot;, &amp;quot;priority &amp;quot;:0}]"&gt;
+    &lt;/script&gt;
+&lt;/body&gt;</property>
+        <property name="CatalogIconImageUrl" type="string" />
+        <property name="Title" type="string">Image Slider</property>
+        <property name="AllowHide" type="bool">True</property>
+        <property name="AllowMinimize" type="bool">True</property>
+        <property name="AllowZoneChange" type="bool">True</property>
+        <property name="TitleUrl" type="string" />
+        <property name="ChromeType" type="chrometype">None</property>
+        <property name="AllowConnect" type="bool">True</property>
+        <property name="Width" type="unit" />
+        <property name="Height" type="unit" />
+        <property name="HelpMode" type="helpmode">Navigate</property>
+        <property name="AllowEdit" type="bool">True</property>
+        <property name="TitleIconImageUrl" type="string" />
+        <property name="Direction" type="direction">NotSet</property>
+        <property name="AllowClose" type="bool">True</property>
+        <property name="ChromeState" type="chromestate">Normal</property>
+      </properties>
+    </data>
+  </webPart>
+</webParts>
