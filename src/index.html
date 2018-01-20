@@ -12,7 +12,8 @@
 
 <body>
 
-    <div class="image-slider-outer" data-bind="widgetSettings: inEditMode() && configChanged()">
+    <div class="image-slider-outer" 
+        data-bind="widgetSettings: inEditMode() && configChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }">
         <div class="banner">&nbsp;</div>
         <div class="slider" data-bind='visible: images().length > 0' style="display:none;">
             <div class="slider-wrapper" data-bind='foreach: images'>

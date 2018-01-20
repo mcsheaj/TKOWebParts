@@ -38,6 +38,8 @@ export class ImageSliderViewModel implements Widget {
     //slider: Slider;
     service: ImageService;
 
+    timerId: number = 0;
+
     /*
     Load the images from the source library into the model.
     */
@@ -63,6 +65,9 @@ export class ImageSliderViewModel implements Widget {
 
         // read in images and push them to this.images
         this.readImages();
+
+        // start scrolling images
+        this.mouseOut();
     }
 
     /*
@@ -213,5 +218,25 @@ export class ImageSliderViewModel implements Widget {
         config.listTitle = this.listTitle();
         this.listTitle.commit();
         return JSON.stringify(config);
+    }
+
+    mouseOver = (): void => {
+        if(this.timerId > 0) {
+            clearInterval(this.timerId);
+            this.timerId = 0;
+        }
+    }
+
+    mouseOut = (): void => {
+        if (this.timerId === 0) {
+            this.timerId = setInterval(() => {
+                if (this.selected() + 1 >= this.images().length) {
+                    this.selected(0);
+                }
+                else {
+                    this.selected(this.selected() + 1);
+                }
+            }, 10000);
+        }
     }
 }
