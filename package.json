@@ -11,10 +11,10 @@
   "author": "Joe McShea",
   "license": "MIT",
   "devDependencies": {
-    "@types/knockout": "3.4.47",
+    "@types/knockout": "^3.4.49",
     "@types/sharepoint": "2016.1.0",
     "awesome-typescript-loader": "3.4.1",
-    "css-loader": "0.28.8",
+    "css-loader": "^0.28.9",
     "file-loader": "1.1.6",
     "node-sass": "4.7.2",
     "path": "0.12.7",
