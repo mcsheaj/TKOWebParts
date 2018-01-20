@@ -13,7 +13,6 @@
 <body>
 
     <div class="image-slider-outer" data-bind="widgetSettings: inEditMode() && configChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }">
-        <div class="banner">&nbsp;</div>
         <div class="slider">
             <div class="slider-wrapper" data-bind='foreach: images'>
                 <div class="slide" data-bind="slide: $root.selected() === $index()">
