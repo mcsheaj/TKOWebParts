@@ -12,23 +12,23 @@
 
 <body>
 
-    <div data-bind='visible: listTitle().length === 0' class="slider-init" style="display:none">
+    <div data-bind='visible: !listTitle()' class="slider-init" style="display:none">
         Edit this web part and select a picture library to begin showing pictures.
     </div>
     <div 
-        data-bind='widgetSettings: inEditMode() && configChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }'
+        data-bind='widgetSettings: needToSave(), event: { mouseover: mouseOver, mouseout: mouseOut }'
         class="image-slider-outer">
         <div 
             data-bind="visible: listTitle().length > 0 && images().length === 0" 
             class="slider-init" style="display:none">
             Click the plus sign to add some images to your library.
         </div>
-        <div data-bind='visible: listTitle().length > 0' class="slider">
+        <div data-bind='visible: hasImages' class="slider">
             <div 
-                data-bind='foreach: images, visible: images().length > 0' 
+                data-bind='foreach: images, visible: hasImages' 
                 class="slider-wrapper">
                 <div data-bind='slider: $root.selected() === $index()' class="slide">
-                    <img data-bind='attr: { src: Url, alt: Title, "data-slide": $index() }' />
+                    <img data-bind='attr: { src: Url, alt: Title }' />
                     <div data-bind='visible: Title' class="caption">
                         <p data-bind='text: Title' class="caption"></p>
                         <p data-bind='text: Description' class="description"></p>
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div 
-            data-bind='foreach: { data: images }, visible: listTitle().length > 0 && images().length > 0' 
+            data-bind='foreach: { data: images }, visible: hasImages' 
             class="slider-nav">
             <a 
                 data-bind='click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }' 
@@ -48,17 +48,17 @@
                 data-bind='click: toggleDialog.bind($root, addDialog), visible: listTitle().length > 0'
                 title="Add"class="slider-button add"></div>
             <div 
-                data-bind='click: toggleDialog.bind($root, editDialog), visible: images().length > 0 && listTitle().length > 0' 
+                data-bind='click: toggleDialog.bind($root, editDialog), visible: hasImages()' 
                 title="Edit" class="slider-button edit"></div>
             <div 
-                data-bind='click: toggleDialog.bind($root, deleteDialog), visible: images().length > 0 && listTitle().length > 0' 
+                data-bind='click: toggleDialog.bind($root, deleteDialog), visible: hasImages()' 
                 title="Delete" class="slider-button delete"></div>
             <div 
                 data-bind='click: toggleDialog.bind($root, editSettings), visible: inEditMode()' 
                 title="Settings" class="slider-button settings"></div>
         </div>
         <div 
-            data-bind='toggleDialog: addDialog(), visible: images().length === 0' 
+            data-bind='toggleDialog: addDialog(), visible: hasImages()' 
             class="addSliderImages modalDialog" style="display:none;">
             <div class="modalDialog-inner">
                 <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
@@ -78,16 +78,16 @@
                 <h2>Edit Image</h2>
                 <span class="sliderFormLabel">Title</span>
                 <input 
-                    data-bind='value: $root.images().length > 0 ? $root.images()[selected()].Title : ""' 
+                    data-bind='value: $root.currentImage().Title' 
                     type="text" class="titleInput" />
                 <br />
                 <span class="sliderFormLabel">Description</span>
                 <textarea 
-                    data-bind='value: $root.images().length > 0 ? $root.images()[selected()].Description : ""' 
+                    data-bind='value: $root.currentImage().Description' 
                     rows="10" cols="55" class="descriptionInput"></textarea>
                 <br />
-                <button data-bind='click: updateImage' type="button" class="sliderButton editSave">Ok</button>
-                <button data-bind='click: resetImage' type="button" class="sliderButton editReset">Cancel</button>
+                <button data-bind='click: updateImage.bind($root, true)' type="button" class="sliderButton editSave">Ok</button>
+                <button data-bind='click: updateImage.bind($root, false)' type="button" class="sliderButton editReset">Cancel</button>
             </div>
         </div>
         <div data-bind='toggleDialog: deleteDialog()' class="deleteSliderImage modalDialog" style="display:none">

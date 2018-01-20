@@ -32,10 +32,16 @@ export class ImageSliderViewModel implements Widget {
     deleteDialog: KnockoutObservable<boolean>;
     editSettings: KnockoutObservable<boolean>;
 
+    // manage settings
     listTitle: KnockoutProtectedObservable<string>;
     interval: KnockoutProtectedObservable<number>;
     configChanged: KnockoutObservable<boolean>;
     inEditMode: KnockoutObservable<boolean>;
+
+    // computed
+    hasImages: any;
+    needToSave: any;
+    currentImage: any;
 
     //slider: Slider;
     service: ImageService;
@@ -66,6 +72,30 @@ export class ImageSliderViewModel implements Widget {
         this.deleteDialog = ko.observable(false);
         this.editSettings = ko.observable(false);
 
+        this.hasImages = ko.computed(() => {
+            let result = true;
+            if (this.listTitle().length === 0 || this.images().length === 0) {
+                result = false;
+            }
+            return ko.observable(result);
+        });
+
+        this.needToSave = ko.computed(() => {
+            let result = true;
+            if (this.inEditMode() && this.configChanged()) {
+                result = false;
+            }
+            return ko.observable(result);
+        });
+
+        this.currentImage = ko.computed((): any => {
+            let result = {
+                Title: "",
+                Description: ""
+            };
+            return this.images().length > 0 ? this.images()[this.selected()] : result;
+        });
+
         // read in images and push them to this.images
         this.readImages();
 
@@ -78,10 +108,10 @@ export class ImageSliderViewModel implements Widget {
     from the drop zone binding, and add it to the model. 
     */
     createImage = (filename: string, buffer: any, complete: () => any): void => {
-        if(this.listTitle().length === 0) {
+        if (this.listTitle().length === 0) {
             return;
         }
-        
+
         this.service.createImage(filename,
             buffer,
             (json: any) => {
@@ -116,7 +146,7 @@ export class ImageSliderViewModel implements Widget {
     Read all images from the source library and push them to the model.
     */
     readImages = (): void => {
-        if(this.listTitle().length === 0) {
+        if (this.listTitle().length === 0) {
             return;
         }
 
@@ -151,34 +181,27 @@ export class ImageSliderViewModel implements Widget {
     /*
     Update the title/description of the current image in the source library.
     */
-    updateImage = (): void => {
-        if(this.listTitle().length === 0) {
+    updateImage = (update: boolean): void => {
+        if (this.images().length === 0) {
             return;
         }
-        
+
         let current = this.images()[this.selected()];
-        this.service.updateImage(current.Id,
-            { Title: current.Title(), Description: current.Description() },
-            (json: any) => {
-                // overwrite the reset state
-                current.Title.commit();
-                current.Description.commit();
-
-                // close the dialog
-                this.toggleDialog(this.editDialog);
-            });
-    }
-
-    /*
-    Reset the model for the current image to it's original state, discarding
-    any changes.
-    */
-    resetImage = (): void => {
-        let current = this.images()[this.selected()];
-
-        // reset the observables
-        current.Title.reset();
-        current.Description.reset();
+        if (update) {
+            // save to SharePoint
+            this.service.updateImage(current.Id,
+                { Title: current.Title(), Description: current.Description() },
+                (json: any) => {
+                    // overwrite the reset state
+                    current.Title.commit();
+                    current.Description.commit();
+                });
+        }
+        else {
+            // reset the observables
+            current.Title.reset();
+            current.Description.reset();
+        }
 
         this.toggleDialog(this.editDialog);
     }
@@ -187,10 +210,10 @@ export class ImageSliderViewModel implements Widget {
     Delete the currently displayed image from the source library and the model.
     */
     deleteImage = (): void => {
-        if(this.listTitle().length === 0) {
+        if (this.images().length === 0) {
             return;
         }
-        
+
         let index = this.selected();
         this.service.deleteImage(
             this.images()[index].FileRef, (json: any) => {
@@ -201,7 +224,9 @@ export class ImageSliderViewModel implements Widget {
                 let deleted = this.images.splice(index, 1);
 
                 // select the previous index
-                this.selected(newIndex);
+                if (newIndex > 0) {
+                    this.selected(newIndex);
+                }
 
                 // close the dialog
                 this.toggleDialog(this.deleteDialog);
@@ -209,19 +234,15 @@ export class ImageSliderViewModel implements Widget {
     }
 
     /*
-    Select and image by 0 based index.F
+    Select and image by 0 based index.
     */
     select = (index: number): void => {
         this.selected(index);
     }
 
     /*
-    Helper callback to launch one of the dialogs.
+    Callback for the web part settings dialog to initiate update.
     */
-    toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
-        dialog(!dialog());
-    }
-
     settings = (update: boolean): void => {
         if (update) {
             if (this.listTitle.hasChanged() || this.interval.hasChanged()) {
@@ -236,19 +257,29 @@ export class ImageSliderViewModel implements Widget {
         this.editSettings(false);
     }
 
+    /*
+    Callback for widgetSettingsBinding, to get view model specific configuration as
+    a JSON string in order to persist it.
+    */
     persistentConfig = (): string => {
         this.config.listTitle = this.listTitle();
         this.config.interval = this.interval();
         return JSON.stringify(this.config);
     }
 
+    /*
+    Stop scrolling images until not hovering.
+    */
     mouseOver = (): void => {
-        if(this.timerId > 0) {
+        if (this.timerId > 0) {
             clearInterval(this.timerId);
             this.timerId = 0;
         }
     }
 
+    /*
+    Start scrolling images unless interval equals zero.
+     */
     mouseOut = (): void => {
         if (this.timerId === 0 && this.config.interval > 0) {
             this.timerId = setInterval(() => {
@@ -260,5 +291,12 @@ export class ImageSliderViewModel implements Widget {
                 }
             }, this.config.interval);
         }
+    }
+
+    /*
+    Helper callback to launch one of the dialogs.
+    */
+    toggleDialog = (dialog: KnockoutObservable<boolean>): void => {
+        dialog(!dialog());
     }
 }
