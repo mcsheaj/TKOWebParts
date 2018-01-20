@@ -78,6 +78,10 @@ export class ImageSliderViewModel implements Widget {
     from the drop zone binding, and add it to the model. 
     */
     createImage = (filename: string, buffer: any, complete: () => any): void => {
+        if(this.listTitle.length === 0) {
+            return;
+        }
+        
         this.service.createImage(filename,
             buffer,
             (json: any) => {
@@ -112,6 +116,10 @@ export class ImageSliderViewModel implements Widget {
     Read all images from the source library and push them to the model.
     */
     readImages = (): void => {
+        if(this.listTitle.length === 0) {
+            return;
+        }
+
         this.service.readImages(
             (json: any) => {
                 let tmp: any[] = [];
@@ -144,6 +152,10 @@ export class ImageSliderViewModel implements Widget {
     Update the title/description of the current image in the source library.
     */
     updateImage = (): void => {
+        if(this.listTitle.length === 0) {
+            return;
+        }
+        
         let current = this.images()[this.selected()];
         this.service.updateImage(current.Id,
             { Title: current.Title(), Description: current.Description() },
@@ -175,6 +187,10 @@ export class ImageSliderViewModel implements Widget {
     Delete the currently displayed image from the source library and the model.
     */
     deleteImage = (): void => {
+        if(this.listTitle.length === 0) {
+            return;
+        }
+        
         let index = this.selected();
         this.service.deleteImage(
             this.images()[index].FileRef, (json: any) => {
