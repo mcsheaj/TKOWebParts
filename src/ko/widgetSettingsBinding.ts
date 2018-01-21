@@ -16,7 +16,8 @@ export const widgetSettings = {
 
         // hide the edit snippet link
         if (window.location.search.toLowerCase().indexOf("showeditsnippet=true") < 0) {
-            let anchor = <HTMLElement>document.querySelector("a[title='Edit Snippet']");
+            let webPart = document.getElementById(widget.webPartId);
+            let anchor = <HTMLElement>webPart.querySelector("a[title='Edit Snippet']");
             if (anchor) {
                 anchor.style.display = "none";
             }
@@ -32,10 +33,12 @@ export const widgetSettings = {
 
         if (value) {
             let okBtn = document.querySelector("input[name$='AppBtn'],input[name$='OKBtn']");
-            okBtn.addEventListener("click", function () {
-                // save the widget's persistent config again on ok
-                saveChanges(widget);
-            }, false);
+            if (okBtn) {
+                okBtn.addEventListener("click", function () {
+                    // save the widget's persistent config again on ok
+                    saveChanges(widget);
+                }, false);
+            }
         }
     }
 };
