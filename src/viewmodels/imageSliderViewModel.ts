@@ -181,13 +181,13 @@ export class ImageSliderViewModel implements Widget {
     /*
     Update the title/description of the current image in the source library.
     */
-    updateImage = (update: boolean): void => {
+    updateImage = (commit: boolean): void => {
         if (this.images().length === 0) {
             return;
         }
 
         let current = this.images()[this.selected()];
-        if (update) {
+        if (commit) {
             // save to SharePoint
             this.service.updateImage(current.Id,
                 { Title: current.Title(), Description: current.Description() },
@@ -243,8 +243,8 @@ export class ImageSliderViewModel implements Widget {
     /*
     Callback for the web part settings dialog to initiate update.
     */
-    settings = (update: boolean): void => {
-        if (update) {
+    settings = (commit: boolean): void => {
+        if (commit) {
             if (this.listTitle.hasChanged() || this.interval.hasChanged()) {
                 this.configChanged(true);
                 this.listTitle.commit();

@@ -29,7 +29,7 @@
             &lt;/div&gt;
         &lt;/div&gt;
         &lt;div data-bind="foreach: { data: images }, visible: $root.hasImages()" class="slider-nav"&gt;
-            &lt;a data-bind="click: $root.select.bind($root, $index()), css: { current: $index() === $root.selected() }" href="#"&gt;&lt;/a&gt;
+            &lt;a data-bind="click: $root.select($index()), css: { current: $index() === $root.selected() }" href="#"&gt;&lt;/a&gt;
         &lt;/div&gt;
         &lt;div class="slider-menu"&gt;
             &lt;div data-bind="click: toggleDialog.bind($root, addDialog), visible: listTitle().length &gt; 0" title="Add" class="slider-button add"&gt;&lt;/div&gt;
@@ -88,7 +88,7 @@
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-    &lt;script type="text/javascript" src="/Style Library/tkoWebPart/pnp-ww.js" ww-appname="ImageSlider" ww-appbind="tkoWebPart.imageSlider.init" ww-appconfig="{&amp;quot;listTitle&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;interval&amp;quot;:10000}" ww-appscripts="[{&amp;quot;src&amp;quot;: &amp;quot;~/tkoWebPart.js&amp;quot;, &amp;quot;priority &amp;quot;:0}]"&gt;
+    &lt;script type="text/javascript" src="/Style Library/tkoWebPart/pnp-ww.js" ww-appname="ImageSlider" ww-appbind="tkoWebPart.imageSlider.init" ww-appconfig="{&amp;quot;listTitle&amp;quot;:&amp;quot;Pictures&amp;quot;,&amp;quot;interval&amp;quot;:10000}" ww-appscripts="[{&amp;quot;src&amp;quot;: &amp;quot;~/tkoWebPart.js&amp;quot;, &amp;quot;priority &amp;quot;:0}]"&gt;
     &lt;/script&gt;
 &lt;/body&gt;</property>
         <property name="CatalogIconImageUrl" type="string" />
