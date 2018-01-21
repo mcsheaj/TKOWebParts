@@ -1,5 +1,8 @@
+/*
+Binding handler
+ */
 export const fileDropzone = {
-    update: (el: HTMLElement, v: () => any) : void => {
+    init: (el: HTMLElement, v: () => any) : void => {
         let options = v();
         this.dropzone = new FileDropzone({
             element: el,
@@ -9,6 +12,9 @@ export const fileDropzone = {
     }
 };
 
+/*
+Interface for a void:void callback 
+*/
 interface CompleteCallback {
     (): void;
 }

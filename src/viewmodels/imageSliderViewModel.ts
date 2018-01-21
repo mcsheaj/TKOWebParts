@@ -39,8 +39,11 @@ export class ImageSliderViewModel implements Widget {
     inEditMode: KnockoutObservable<boolean>;
 
     // computed
+    hasList: any;
     hasImages: any;
     needToSave: any;
+    showAddMessage: any;
+    showMenu: any;
     currentImage: any;
 
     //slider: Slider;
@@ -72,28 +75,52 @@ export class ImageSliderViewModel implements Widget {
         this.deleteDialog = ko.observable(false);
         this.editSettings = ko.observable(false);
 
-        this.hasImages = ko.computed(() => {
-            let result = true;
-            if (this.listTitle().length === 0 || this.images().length === 0) {
-                result = false;
+        this.hasList = ko.computed(() => {
+            let result = false;
+            if (this.listTitle().length > 0) {
+                result = true;
             }
-            return ko.observable(result);
+            return result;
+        });
+
+        this.hasImages = ko.computed(() => {
+            let result = false;
+            if (this.images().length > 0) {
+                result = true;
+            }
+            return result;
         });
 
         this.needToSave = ko.computed(() => {
-            let result = true;
+            let result = false;
             if (this.inEditMode() && this.configChanged()) {
-                result = false;
+                result = true;
             }
-            return ko.observable(result);
+            return result;
+        });
+
+        this.showAddMessage = ko.computed(() => {
+            let result = false;
+            if(this.hasList() && !this.hasImages()) {
+                result = true;
+            }
+            return result;
+        });
+
+        this.showMenu = ko.computed(() => {
+            let result = false;
+            if(this.hasList() || this.inEditMode() || this.hasImages()) {
+                result = true;
+            }
+            return result;
         });
 
         this.currentImage = ko.computed((): any => {
-            let result = {
+            let dummy = {
                 Title: "",
                 Description: ""
             };
-            return this.images().length > 0 ? this.images()[this.selected()] : result;
+            return this.images().length > 0 && this.selected() >= 0 ? this.images()[this.selected()] : dummy;
         });
 
         // read in images and push them to this.images
@@ -224,9 +251,7 @@ export class ImageSliderViewModel implements Widget {
                 let deleted = this.images.splice(index, 1);
 
                 // select the previous index
-                if (newIndex > 0) {
-                    this.selected(newIndex);
-                }
+                this.selected(newIndex);
 
                 // close the dialog
                 this.toggleDialog(this.deleteDialog);

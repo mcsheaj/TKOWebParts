@@ -15,7 +15,7 @@
     <div data-bind='visible: !listTitle()' class="slider-init" style="display:none">
         Edit this web part and select a picture library to begin showing pictures.
     </div>
-    <div data-bind='visible: !hasImages()' class="slider-init" style="display:none">
+    <div data-bind='visible: showAddMessage()' class="slider-init" style="display:none">
         Click the plus sign to add some images to your library.
     </div>
     <div 
@@ -37,10 +37,10 @@
                 data-bind='click: $root.select($index()), css: { current: $index() === $root.selected() }' 
                 href="#"></a>
         </div>
-        <div class="slider-menu">
+        <div data-bind="visible: $root.showMenu()" class="slider-menu" style="display:none">
             <div 
-                data-bind='click: toggleDialog.bind($root, addDialog), visible: listTitle().length > 0'
-                title="Add"class="slider-button add"></div>
+                data-bind='click: toggleDialog.bind($root, addDialog), visible: $root.hasImages() || $root.hasList()'
+                title="Add" class="slider-button add"></div>
             <div 
                 data-bind='click: toggleDialog.bind($root, editDialog), visible: $root.hasImages()' 
                 title="Edit" class="slider-button edit"></div>
@@ -51,58 +51,58 @@
                 data-bind='click: toggleDialog.bind($root, editSettings), visible: $root.inEditMode()' 
                 title="Settings" class="slider-button settings"></div>
         </div>
-        <div 
-            data-bind='toggleDialog: addDialog(), visible: $root.hasImages()' 
-            class="addSliderImages modalDialog" style="display:none;">
-            <div class="modalDialog-inner">
-                <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
-                <div 
-                    data-bind='fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }' 
-                    class="dragandrophandler">
-                    <div class="draganddropbusy" style="display:none">
-                        &nbsp;
+        <div data-bind="visible: $root.showMenu()" class="slider-dialogs" style="display:none">
+            <div data-bind='toggleDialog: addDialog()' class="addSliderImages modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
+                    <div 
+                        data-bind='fileDropzone: { processFile: $root.createImage, complete: $root.uploadComplete }' 
+                        class="dragandrophandler">
+                        <div class="draganddropbusy" style="display:none">
+                            &nbsp;
+                        </div>
+                        <div class="draganddroplabel">Drag & Drop Images Here...</div>
                     </div>
-                    <div class="draganddroplabel">Drag & Drop Images Here...</div>
                 </div>
             </div>
-        </div>
-        <div data-bind='toggleDialog: editDialog()' class="editSliderImage modalDialog" style="display:none">
-            <div class="modalDialog-inner">
-                <a data-bind='click: toggleDialog.bind($root, editDialog)' href="#" title="Close" class="close">X</a>
-                <h2>Edit Image</h2>
-                <span class="sliderFormLabel">Title</span>
-                <input data-bind='value: $root.currentImage().Title' type="text" class="titleInput" />
-                <br />
-                <span class="sliderFormLabel">Description</span>
-                <textarea data-bind='value: $root.currentImage().Description' rows="10" cols="55" class="descriptionInput"></textarea>
-                <br />
-                <button data-bind='click: updateImage.bind($root, true)' type="button" class="sliderButton editSave">Ok</button>
-                <button data-bind='click: updateImage.bind($root, false)' type="button" class="sliderButton editReset">Cancel</button>
-            </div>
-        </div>
-        <div data-bind='toggleDialog: deleteDialog()' class="deleteSliderImage modalDialog" style="display:none">
-            <div class="modalDialog-inner">
-                <a data-bind='click: toggleDialog.bind($root, deleteDialog)' href="#" title="Close" class="close">X</a>
-                <h2>Delete Confirmation</h2>
-                <p>Are you sure you want to delete the current image?</p>
-                <button data-bind='click: deleteImage' type="button" class="sliderButton delete">Delete</button>
-            </div>
-        </div>
-        <div data-bind='toggleDialog: editSettings()' class="editSettings modalDialog" style="display:none">
-            <div class="modalDialog-inner">
-                <a data-bind='click: toggleDialog.bind($root, editSettings)' href="#" title="Close" class="close">X</a>
-                <h2>Edit Web Part Settings</h2>
-                <div>
-                    <span class="sliderFormLabel">List Title</span>
-                    <input data-bind='value: listTitle' type="text" class="titleInput" />
+            <div data-bind='toggleDialog: editDialog()' class="editSliderImage modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, editDialog)' href="#" title="Close" class="close">X</a>
+                    <h2>Edit Image</h2>
+                    <span class="sliderFormLabel">Title</span>
+                    <input data-bind='value: $root.currentImage().Title' type="text" class="titleInput" />
+                    <br />
+                    <span class="sliderFormLabel">Description</span>
+                    <textarea data-bind='value: $root.currentImage().Description' rows="10" cols="55" class="descriptionInput"></textarea>
+                    <br />
+                    <button data-bind='click: updateImage.bind($root, true)' type="button" class="sliderButton editSave">Ok</button>
+                    <button data-bind='click: updateImage.bind($root, false)' type="button" class="sliderButton editReset">Cancel</button>
                 </div>
-                <div>
-                    <span class="sliderFormLabel">Interval</span>
-                    <input data-bind='value: interval' type="text" class="input" />
+            </div>
+            <div data-bind='toggleDialog: deleteDialog()' class="deleteSliderImage modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, deleteDialog)' href="#" title="Close" class="close">X</a>
+                    <h2>Delete Confirmation</h2>
+                    <p>Are you sure you want to delete the current image?</p>
+                    <button data-bind='click: deleteImage' type="button" class="sliderButton delete">Delete</button>
                 </div>
-                <br />
-                <button data-bind='click: settings.bind($root, true)' class="sliderButton editSave" type="button">Ok</button>
-                <button data-bind='click: settings.bind($root, false)' class="sliderButton editReset" type="button">Cancel</button>
+            </div>
+            <div data-bind='toggleDialog: editSettings()' class="editSettings modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, editSettings)' href="#" title="Close" class="close">X</a>
+                    <h2>Edit Web Part Settings</h2>
+                    <div>
+                        <span class="sliderFormLabel">List Title</span>
+                        <input data-bind='value: listTitle' type="text" class="titleInput" />
+                    </div>
+                    <div>
+                        <span class="sliderFormLabel">Interval</span>
+                        <input data-bind='value: interval' type="text" class="input" />
+                    </div>
+                    <br />
+                    <button data-bind='click: settings.bind($root, true)' class="sliderButton editSave" type="button">Ok</button>
+                    <button data-bind='click: settings.bind($root, false)' class="sliderButton editReset" type="button">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
