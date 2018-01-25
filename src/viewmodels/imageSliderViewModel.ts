@@ -38,6 +38,8 @@ export class ImageSliderViewModel implements Widget {
     configChanged: KnockoutObservable<boolean>;
     inEditMode: KnockoutObservable<boolean>;
 
+    initialized: KnockoutObservable<boolean>;
+
     // computed
     hasList: any;
     hasImages: any;
@@ -68,12 +70,16 @@ export class ImageSliderViewModel implements Widget {
         this.interval = protectedObservable(config.interval);
         this.configChanged = ko.observable(false);
         this.inEditMode = ko.observable(false);
+        this.initialized = ko.observable(false);
 
         // initialize dialog observables
         this.addDialog = ko.observable(false);
         this.editDialog = ko.observable(false);
         this.deleteDialog = ko.observable(false);
         this.editSettings = ko.observable(false);
+
+        // read in images and push them to this.images
+        this.readImages();
 
         this.hasList = ko.computed(() => {
             let result = false;
@@ -101,7 +107,7 @@ export class ImageSliderViewModel implements Widget {
 
         this.showAddMessage = ko.computed(() => {
             let result = false;
-            if(this.hasList() && !this.hasImages()) {
+            if(this.hasList() && this.initialized() && !this.hasImages()) {
                 result = true;
             }
             return result;
@@ -109,7 +115,7 @@ export class ImageSliderViewModel implements Widget {
 
         this.showMenu = ko.computed(() => {
             let result = false;
-            if(this.hasList() || this.inEditMode() || this.hasImages()) {
+            if(this.initialized() && (this.inEditMode() || this.hasList())) {
                 result = true;
             }
             return result;
@@ -122,9 +128,6 @@ export class ImageSliderViewModel implements Widget {
             };
             return this.images().length > 0 && this.selected() >= 0 ? this.images()[this.selected()] : dummy;
         });
-
-        // read in images and push them to this.images
-        this.readImages();
 
         // start scrolling images
         this.mouseOut();
@@ -202,6 +205,7 @@ export class ImageSliderViewModel implements Widget {
                     // select the first image
                     this.selected(0);
                 }
+                this.initialized(true);
             });
     }
 

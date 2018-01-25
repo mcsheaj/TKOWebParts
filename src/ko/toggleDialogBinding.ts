@@ -1,5 +1,5 @@
 export const toggleDialog = {
-    update: (el:HTMLElement, any, v: () => any) : void => {
+    update: (el:HTMLElement, v: () => any) : void => {
         let value = v().toggleDialog;
         if(value) {
             el.classList.add("show");
