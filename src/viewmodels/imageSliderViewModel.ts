@@ -251,11 +251,11 @@ export class ImageSliderViewModel implements Widget {
                 // get the previous image index
                 let newIndex = index > 0 ? index - 1 : this.images().length - 2;
 
-                // remove the deleted index from the model
-                let deleted = this.images.splice(index, 1);
-
                 // select the previous index
                 this.selected(newIndex);
+
+                // remove the deleted index from the model
+                let deleted = this.images.splice(index, 1);
 
                 // close the dialog
                 this.toggleDialog(this.deleteDialog);
