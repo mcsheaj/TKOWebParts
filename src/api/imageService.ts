@@ -27,10 +27,7 @@ export class ImageService {
         let service = `${this.webUrl}/_api/web/lists/getByTitle('${this.listTitle}')/RootFolder/Files/add(url='${filename}',overwrite='true')`;
         let query = `$expand=ListItemAllFields&@TargetLibrary='${this.listTitle}'&@TargetFileName='${filename}'`;
 
-        fetchx(`${service}?${query}`, {
-            method: "POST",
-            body: buffer
-        }).then((json) => {
+        fetchx(`${service}?${query}`, { method: "POST", body: buffer }).then((json) => {
             callback(json);
         }).catch((error) => {
             alert(error);
@@ -57,10 +54,7 @@ export class ImageService {
     updateImage = (id: number, merge: any, callback?: Callback): void => {
         let url = `${this.webUrl}/_api/Web/Lists/getByTitle('${this.listTitle}')/Items(${id})`;
         
-        fetchx(url, {
-            method: "MERGE",
-            body: JSON.stringify(merge),
-        }).then(function () {
+        fetchx(url, { method: "MERGE", body: JSON.stringify(merge) }).then(function () {
             callback(null);
         }).catch(function (error) {
             alert(error);
@@ -73,9 +67,7 @@ export class ImageService {
     deleteImage = (serverRelativeUrl: string, callback?: Callback): void => {
         let url = `${this.webUrl}/_api/Web/getFileByServerRelativeUrl('${serverRelativeUrl}')`;
 
-        fetchx(url, {
-            method: "DELETE"
-        }).then(function () {
+        fetchx(url, { method: "DELETE" }).then(function () {
             callback(null);
         }).catch(function (error) {
             alert(error);
