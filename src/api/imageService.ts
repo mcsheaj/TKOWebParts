@@ -59,9 +59,6 @@ export class ImageService {
         
         fetchx(url, {
             method: "MERGE",
-            headers: {
-                "content-Type": "application/json;odata=nometadata"
-            },
             body: JSON.stringify(merge),
         }).then(function () {
             callback(null);

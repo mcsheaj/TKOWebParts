@@ -51,6 +51,9 @@ export function fetchx(url: string, init?: any) {
         if(!headers.has("IF-MATCH")) {
             init.headers.append("IF-MATCH", "*");
         }
+        if(!headers.has("content-type")) {
+            init.headers.append("content-type", "application/json;odata=nometadata");
+        }
     }
 
     if(init.method === "DELETE") {
