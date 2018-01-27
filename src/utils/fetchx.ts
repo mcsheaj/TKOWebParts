@@ -3,8 +3,9 @@ import "cross-fetch/polyfill";
 declare var UpdateFormDigest: any;
 declare var _spFormDigestRefreshInterval: any;
 
-export function fetchx(url: string, init: any) {
-    let expectsJson = false;
+export function fetchx(url: string, init?: any) {
+    let acceptSpecified = false;
+    init = init || {};
 
     // all SharePoint operations are going to need this, so let's default.
     init.credentials = "include";
@@ -15,17 +16,48 @@ export function fetchx(url: string, init: any) {
         for (let key in init.headers) {
             newHeaders.append(key, init.headers[key]);
             if (key.toLowerCase() === "accept") {
-                if (init.headers[key].indexOf("application/json") > -1) {
-                    expectsJson = true;
-                }
+                acceptSpecified = true;
             }
         }
         init.headers = newHeaders;
     }
 
-    // update the form digest as needed to prevent 
-    // "The security validation for this page is invalid" errors.
+    // create heades if there aren't any because we're going to add a couple
+    if(!init.headers) {
+        init.headers = new Headers();
+    }
+
+    // update the form digest as needed to prevent "The security validation for this page is invalid" errors.
     UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+    let digest = (<HTMLInputElement>document.getElementById("__REQUESTDIGEST"));
+
+    // then add the request digest header, really only needed for non-get but doesn't hurt anything
+    if(digest) {
+        init.headers.append("X-RequestDigest", digest.value);
+    }
+
+    // add accept application/json;odata=nometadata by default
+    let headers = <Headers>init.headers;
+    if(!headers.has("accept")) {
+        init.headers.append("accept", "application/json;odata=nometadata");
+    }
+
+    // fix merge, SharePoint rest chooses only to accept this as POST
+    if(init.method === "MERGE") {
+        init.method = "POST";
+        if(!headers.has("X-HTTP-Method")) {
+            init.headers.append("X-HTTP-Method", "MERGE");
+        }
+        if(!headers.has("IF-MATCH")) {
+            init.headers.append("IF-MATCH", "*");
+        }
+    }
+
+    if(init.method === "DELETE") {
+        if(!headers.has("X-HTTP-Method")) {
+            init.headers.append("X-HTTP-Method", "DELETE");
+        }
+    }
 
     /*
     Call fetch, process obvious error responses, pre-process json responses, and
@@ -44,27 +76,17 @@ export function fetchx(url: string, init: any) {
 
         // no content, but not quite right
         if (response.headers.get("content-length") === "0") {
-            /*
-            This seems like an obvious error, but SharePoint REST is not consistent
-            on this. It seems like any response with no content should return a status 
-            of "204 No Content", which the delete operation does, but the merge 
-            operation returns "200 Ok" with a 'content-length' of 0, which technically
-            is a fine response.
-            */
+            // some rest endpoints return no content, but don't return status 204 like SharePoint's MERGE
             return response;
         }
 
         // process json responses
-        if (expectsJson) {
-            let contentType = response.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") > -1) {
-                return response.json();
-            } else {
-                throw new TypeError("Oops, we haven't got JSON!");
-            }
-        }
+        let contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") > -1) {
+            return response.json();
+        } 
 
-        // no errors but also not json
+        // no errors but also not json, just return the response
         return response;
     });
 }
