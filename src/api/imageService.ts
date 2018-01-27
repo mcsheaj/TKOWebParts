@@ -11,13 +11,12 @@ interface Merge {
 }
 
 export class ImageService {
-    webUrl: string;
 
     /*
     Instantiate per list, save the list entity type full name for updates.
     */
-    constructor(public listTitle: string) {
-        this.webUrl = _spPageContextInfo.webAbsoluteUrl;
+    constructor(public listTitle: string, public webUrl?: string) {
+        this.webUrl = (this.webUrl ? this.webUrl : _spPageContextInfo.webAbsoluteUrl);
     }
 
     /*
