@@ -35,10 +35,10 @@ export class ImageSliderViewModel implements Widget {
     // manage settings
     listTitle: KnockoutProtectedObservable<string>;
     interval: KnockoutProtectedObservable<number>;
-    configChanged: KnockoutObservable<boolean>;
-    inEditMode: KnockoutObservable<boolean>;
+    hasConfigChanged: KnockoutObservable<boolean>;
+    isInEditMode: KnockoutObservable<boolean>;
 
-    initialized: KnockoutObservable<boolean>;
+    isInitialized: KnockoutObservable<boolean>;
 
     // computed
     hasList: any;
@@ -68,9 +68,9 @@ export class ImageSliderViewModel implements Widget {
         // initialize settings observables
         this.listTitle = protectedObservable(config.listTitle);
         this.interval = protectedObservable(config.interval);
-        this.configChanged = ko.observable(false);
-        this.inEditMode = ko.observable(false);
-        this.initialized = ko.observable(false);
+        this.hasConfigChanged = ko.observable(false);
+        this.isInEditMode = ko.observable(false);
+        this.isInitialized = ko.observable(false);
 
         // initialize dialog observables
         this.addDialog = ko.observable(false);
@@ -92,30 +92,6 @@ export class ImageSliderViewModel implements Widget {
         this.hasImages = ko.computed(() => {
             let result = false;
             if (this.images().length > 0) {
-                result = true;
-            }
-            return result;
-        });
-
-        this.needToSave = ko.computed(() => {
-            let result = false;
-            if (this.inEditMode() && this.configChanged()) {
-                result = true;
-            }
-            return result;
-        });
-
-        this.showAddMessage = ko.computed(() => {
-            let result = false;
-            if(this.hasList() && this.initialized() && !this.hasImages()) {
-                result = true;
-            }
-            return result;
-        });
-
-        this.showMenu = ko.computed(() => {
-            let result = false;
-            if(this.initialized() && (this.inEditMode() || this.hasList())) {
                 result = true;
             }
             return result;
@@ -205,7 +181,7 @@ export class ImageSliderViewModel implements Widget {
                     // select the first image
                     this.selected(0);
                 }
-                this.initialized(true);
+                this.isInitialized(true);
             });
     }
 
@@ -251,13 +227,15 @@ export class ImageSliderViewModel implements Widget {
                 // get the previous image index
                 let newIndex = index > 0 ? index - 1 : this.images().length - 2;
 
-                // select the previous index
-                this.selected(newIndex);
+                this.selected(-1);
 
                 // remove the deleted index from the model
                 let deleted = this.images.splice(index, 1);
 
-                // close the dialog
+               // select the previous index
+               this.selected(newIndex);
+
+               // close the dialog
                 this.toggleDialog(this.deleteDialog);
             });
     }
@@ -275,7 +253,7 @@ export class ImageSliderViewModel implements Widget {
     settings = (commit: boolean): void => {
         if (commit) {
             if (this.listTitle.hasChanged() || this.interval.hasChanged()) {
-                this.configChanged(true);
+                this.hasConfigChanged(true);
                 this.listTitle.commit();
                 this.interval.commit();
             }
@@ -290,7 +268,7 @@ export class ImageSliderViewModel implements Widget {
     Callback for widgetSettingsBinding, to get view model specific configuration as
     a JSON string in order to persist it.
     */
-    persistentConfig = (): string => {
+    persistConfig = (): string => {
         this.config.listTitle = this.listTitle();
         this.config.interval = this.interval();
         return JSON.stringify(this.config);

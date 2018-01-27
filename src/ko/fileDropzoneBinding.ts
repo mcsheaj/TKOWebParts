@@ -1,4 +1,11 @@
 /*
+Interface for a void:void callback function
+*/
+interface CompleteCallback {
+    (): void;
+}
+
+/*
 Binding handler
  */
 export const fileDropzone = {
@@ -11,13 +18,6 @@ export const fileDropzone = {
         });
     }
 };
-
-/*
-Interface for a void:void callback 
-*/
-interface CompleteCallback {
-    (): void;
-}
 
 interface FileDropZoneConfig {
     element: Element;

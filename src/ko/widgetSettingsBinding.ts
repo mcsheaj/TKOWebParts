@@ -2,8 +2,8 @@ import * as ko from "knockout";
 
 export interface Widget {
     webPartId: string;
-    inEditMode: KnockoutObservable<boolean>;
-    persistentConfig(): string;
+    isInEditMode: KnockoutObservable<boolean>;
+    persistConfig(): string;
 }
 
 export const widgetSettings = {
@@ -12,7 +12,7 @@ export const widgetSettings = {
         let widget = <Widget>ctx.$root;
 
         // tell the widget if we're in edit mode
-        widget.inEditMode(isInEditMode(widget));
+        widget.isInEditMode(isInEditMode(widget));
 
         // hide the edit snippet link
         if (window.location.search.toLowerCase().indexOf("showeditsnippet=true") < 0) {
@@ -52,7 +52,7 @@ const saveChanges = (widget: Widget): void => {
             let parser = new DOMParser();
             let doc = parser.parseFromString(input.value, "text/html");
 
-            doc.querySelector("script").setAttribute("ww-appConfig", widget.persistentConfig());
+            doc.querySelector("script").setAttribute("ww-appConfig", widget.persistConfig());
             input.value = doc.body.outerHTML;
         }
     }
