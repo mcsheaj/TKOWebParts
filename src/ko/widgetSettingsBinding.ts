@@ -12,7 +12,12 @@ export const widgetSettings = {
         let widget = <Widget>ctx.$root;
 
         // tell the widget if we're in edit mode
-        widget.isInEditMode(isInEditMode(widget));
+        if(isInEditMode(widget)) {
+            widget.isInEditMode(true);
+            el.addEventListener("keydown", function(e) {
+                e.stopPropagation();
+            });
+        }
 
         // hide the edit snippet link
         if (window.location.search.toLowerCase().indexOf("showeditsnippet=true") < 0) {
