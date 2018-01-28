@@ -54,7 +54,7 @@
                 title="Settings" class="slider-button settings"></div>
         </div>
         <div 
-             data-bind="visible: $root.isInitialized() && ($root.isInEditMode() || $root.hasList())" 
+             data-bind="visible: $root.isInitialized() || ($root.isInEditMode() || $root.hasList())" 
              class="slider-dialogs" style="display:none">
             <div data-bind='toggleDialog: addDialog()' class="addSliderImages modalDialog">
                 <div class="modalDialog-inner">
