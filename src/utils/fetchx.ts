@@ -22,9 +22,15 @@ export function fetchx(url: string, init?: any) {
         init.headers = newHeaders;
     }
 
-    // create heades if there aren't any because we're going to add a couple
+    // create headers if there aren't any because we're going to add a couple
     if(!init.headers) {
         init.headers = new Headers();
+    }
+
+    // add accept application/json;odata=nometadata by default
+    let headers = <Headers>init.headers;
+    if(!headers.has("accept")) {
+        init.headers.append("accept", "application/json;odata=nometadata");
     }
 
     // update the form digest as needed to prevent "The security validation for this page is invalid" errors.
@@ -34,12 +40,6 @@ export function fetchx(url: string, init?: any) {
     // then add the request digest header, really only needed for non-get but doesn't hurt anything
     if(digest) {
         init.headers.append("X-RequestDigest", digest.value);
-    }
-
-    // add accept application/json;odata=nometadata by default
-    let headers = <Headers>init.headers;
-    if(!headers.has("accept")) {
-        init.headers.append("accept", "application/json;odata=nometadata");
     }
 
     // fix merge, SharePoint rest chooses only to accept this as POST
