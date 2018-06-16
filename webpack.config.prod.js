@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     mode: 'production',
@@ -32,9 +33,27 @@ module.exports = {
         ]
     },
 
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({ sourceMap: true })
-    ],
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                uglifyOptions: {
+                    compress: true,
+                    ecma: 6,
+                    mangle: true,
+                    output: {
+                        comments: false
+                    },
+                    compress: {
+                        dead_code: true,
+                        drop_console: true
+                    }
+                },
+                sourceMap: true
+            })
+        ]
+    },
 
     externals: {
     },
