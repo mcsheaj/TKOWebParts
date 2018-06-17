@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<!--
+    Export any web part from a SharePoint page - https://chuvash.eu/2014/09/19/export-any-web-part-from-a-sharepoint-page/ by Anatoly Mironov
+    -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Creating a CSS3 Slider</title>
+</head>
+
+<body>
+
+    <div data-bind='visible: !listTitle()' class="document-viewer-init" style="display:none">
+        Edit this web part and select a picture library to begin showing pictures.
+    </div>
+    <div data-bind='visible: hasList() && isInitialized() && !hasDocuments()' class="document-viewer-init" style="display:none">
+        Click the plus sign to add some images to your library.
+    </div>
+    <div data-bind="widgetSettings: hasConfigChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }" class="document-viewer-outer">
+        <div data-bind="visible: $root.hasDocuments()" class="slider">
+            <div data-bind="foreach: documents" class="slider-wrapper">
+                <div data-bind="slider: $root.selected() === $index()" class="slide">
+                    <img data-bind="attr: { src: Url, alt: Title }">
+                    <div data-bind="visible: Title" class="caption">
+                        <p data-bind="text: Title" class="caption"></p>
+                        <p data-bind="text: Description" class="description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="foreach: { data: documents }, visible: $root.hasDocuments()" class="slider-nav">
+            <a data-bind="click: $root.select($index()), css: { current: $index() === $root.selected() }" href="#"></a>
+        </div>
+        <div  class="button-bar" style="display:none"
+            data-bind="visible: $root.isInitialized() && ($root.isInEditMode() || $root.hasDocuments() || $root.hasList())">
+            <div title="Add" class="button button-large add"
+                data-bind='click: toggleDialog.bind($root, addDialog), visible: $root.hasDocuments() || $root.hasList()' ></div>
+            <div title="Settings" class="button button-large settings"
+                data-bind='click: toggleDialog.bind($root, editSettings), visible: $root.isInEditMode()'></div>
+        </div>
+        <div data-bind="visible: $root.isInitialized() || ($root.isInEditMode() || $root.hasList())" class="dialogs" style="display:none">
+            <div data-bind='toggleDialog: addDialog()' class="add-document modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
+                    <div data-bind='fileDropzone: { processFile: $root.createDocument, complete: $root.uploadComplete }' class="drag-and-drop-handler">
+                        <div class="drag-and-drop-busy" style="display:none">
+                            &nbsp;
+                        </div>
+                        <div class="draganddroplabel">Drag & Drop Images Here...</div>
+                    </div>
+                </div>
+            </div>
+            <div data-bind='toggleDialog: editSettings()' class="editSettings modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, editSettings)' href="#" title="Close" class="close">X</a>
+                    <h2>Edit Web Part Settings</h2>
+                    <div>
+                        <span class="form-label">List Title</span>
+                        <input data-bind='value: listTitle' type="text" class="titleInput" />
+                    </div>
+                    <div>
+                        <span class="form-label">Interval</span>
+                        <input data-bind='value: interval' type="text" class="input" />
+                    </div>
+                    <div>
+                        <span class="form-label">Other Fields</span>
+                        <textarea data-bind='value: otherFields' rows="10" cols="55" class="descriptionInput" ></textarea>
+                    </div>
+                    <br />
+                    <button data-bind='click: settings.bind($root, true)' class="sliderButton editSave" type="button">Ok</button>
+                    <button data-bind='click: settings.bind($root, false)' class="sliderButton editReset" type="button">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script 
+        type="text/javascript" 
+        src="/Style Library/tkoWebPart/pnp-ww.js" 
+        ww-appname="ImageSlider" 
+        ww-appbind="tkoWebPart.libraryEditor.init"
+        ww-appconfig='{"listTitle": "Pictures", "interval": 10000, "otherFields": [{"name": "Description", "displayName":"Description", "type":"Note" }]}'
+        ww-appscripts='[{"src": "~/tkoWebPart.js", "priority ":0}]'>
+    </script>
+    
+</body>
+
+</html>

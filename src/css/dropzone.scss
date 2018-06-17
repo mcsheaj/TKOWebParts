@@ -1,5 +1,5 @@
-.image-slider-outer {
-    .dragandrophandler {
+.document-viewer-outer {
+    .drag-and-drop-handler {
         border: 2px dotted #0B85A1;
         width: 550px;
         height: 150px;
@@ -12,12 +12,12 @@
         background-color: rgba(11, 133, 161, .1);
         margin-top: 20px;
 
-        &.dragandrophandler.dragover {
+        &.drag-and-drop-handler.drag-over {
             border: 2px solid rgba(11, 133, 161, 1);
             background-color: rgba(11, 133, 161, .3);
         }
 
-        .draganddropbusy {
+        .drag-and-drop-busy {
             height: 150px;
             width: 550px;
             background-repeat: no-repeat;

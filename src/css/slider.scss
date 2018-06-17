@@ -1,11 +1,7 @@
 $height: 552px;
 $width: 800px;
 
-.slider-init {
-    color: maroon;
-}
-
-.image-slider-outer {    
+.document-viewer-outer {    
     .slider {
         margin: 2em auto;
         width: 802px;
@@ -71,33 +67,6 @@ $width: 800px;
         .caption.visible {
             bottom: 0;
             opacity: 1;
-        }
-
-        .menu-span {
-            top: 25px;
-            left: 680px;
-            background-color: rgba(255,255,255,.8);
-            height: 2em;
-            width: 6em;
-        }
-
-        .icon {
-            width: 144px;
-            height: 144px;
-            position: relative;
-            float: left;
-            cursor: pointer;
-        }
-
-        .icon:hover {
-            background-color: palegoldenrod;
-        }
-
-        .svg-icon {
-            width: 4096;
-            height: 4096;
-            margin: 2 0 0 2;
-            fill: #1462ac
         }
     }
 

@@ -1,29 +1,37 @@
 import * as ko from "knockout";
-import { ImageService } from "../api/imageService";
+import { LibraryService } from "../api/libraryService";
 import { protectedObservable, KnockoutProtectedObservable } from "../ko/protectedObservable";
 import { Widget } from "../ko/widgetSettingsBinding";
 
-// web part configuration
-export interface SliderConfig {
-    listTitle: string;
-    interval: number;
+// field structure for the web part configuration
+export interface Field {
+    name: string;
+    displayName: string;
+    type: string;
 }
 
-// model for a single image.
-export interface Image {
-    Url: string;
-    Title: KnockoutProtectedObservable<string>;
-    Description: KnockoutProtectedObservable<string>;
+// web part configuration
+export interface EditorConfig {
+    listTitle: string;
+    interval: number;
+    otherFields: Field[];
+}
+
+// model for a single document
+export interface Document {
     Id: number;
     FileRef: string;
+    Url: string;
+    Title: KnockoutProtectedObservable<string>;
+    [name: string]: any;
 }
 
 /*
-View model for the image slider.
+View model for the library editor
 */
-export class ImageSliderViewModel implements Widget {
+export class LibraryEditorViewModel implements Widget {
     webPartId: string;
-    images: KnockoutObservableArray<Image>;
+    documents: KnockoutObservableArray<Document>;
     selected: KnockoutObservable<number>;
 
     // dialog observables
@@ -35,6 +43,9 @@ export class ImageSliderViewModel implements Widget {
     // manage settings
     listTitle: KnockoutProtectedObservable<string>;
     interval: KnockoutProtectedObservable<number>;
+    otherFields: KnockoutProtectedObservable<string>;
+
+    // state
     hasConfigChanged: KnockoutObservable<boolean>;
     isInEditMode: KnockoutObservable<boolean>;
 
@@ -42,33 +53,38 @@ export class ImageSliderViewModel implements Widget {
 
     // computed
     hasList: any;
-    hasImages: any;
+    hasDocuments: any;
     needToSave: any;
     showAddMessage: any;
     showMenu: any;
-    currentImage: any;
+    currentDocument: any;
 
-    //slider: Slider;
-    service: ImageService;
+    service: LibraryService;
 
     timerId: number = 0;
 
     /*
-    Load the images from the source library into the model.
+    Load the documents from the source library into the model.
     */
-    constructor(id: string, public config: SliderConfig) {
+    constructor(id: string, public config: EditorConfig) {
         // initialize members
         this.webPartId = id;
-        this.service = new ImageService(this.config.listTitle);
+        let select: string = "Id,FileRef,Title";
+        config.otherFields.forEach(field => select += "," + field.name );
+        this.service = new LibraryService(this.config.listTitle, select);
+
 
         // initialize observables
-        this.images = ko.observableArray([]);
+        this.documents = ko.observableArray([]);
         this.selected = ko.observable(0);
 
         // initialize settings observables
         this.listTitle = protectedObservable(config.listTitle);
         this.interval = protectedObservable(config.interval);
+        this.otherFields = protectedObservable(JSON.stringify(config.otherFields, null, 4));
         this.hasConfigChanged = ko.observable(false);
+
+        // initialize state observables
         this.isInEditMode = ko.observable(false);
         this.isInitialized = ko.observable(false);
 
@@ -78,8 +94,8 @@ export class ImageSliderViewModel implements Widget {
         this.deleteDialog = ko.observable(false);
         this.editSettings = ko.observable(false);
 
-        // read in images and push them to this.images
-        this.readImages();
+        // read in documents and push them to this.documents
+        this.readDocuments();
 
         this.hasList = ko.computed(() => {
             let result = false;
@@ -89,51 +105,51 @@ export class ImageSliderViewModel implements Widget {
             return result;
         });
 
-        this.hasImages = ko.computed(() => {
+        this.hasDocuments = ko.computed(() => {
             let result = false;
-            if (this.images().length > 0) {
+            if (this.documents().length > 0) {
                 result = true;
             }
             return result;
         });
 
-        this.currentImage = ko.computed((): any => {
-            let dummy = {
+        this.currentDocument = ko.computed((): any => {
+            let dummy: any = {
                 Title: "",
-                Description: ""
             };
-            return this.images().length > 0 && this.selected() >= 0 ? this.images()[this.selected()] : dummy;
+            this.config.otherFields.forEach(field => dummy[field.name] = "" );            
+            return this.documents().length > 0 && this.selected() >= 0 ? this.documents()[this.selected()] : dummy;
         });
 
-        // start scrolling images
+        // start scrolling documents
         this.mouseOut();
     }
 
     /*
-    Callback for FileDropzone binding.  Create a new image in the source library from data passed 
+    Callback for FileDropzone binding.  Create a new document in the source library from data passed 
     from the drop zone binding, and add it to the model. 
     */
-    createImage = (filename: string, buffer: any, complete: () => any): void => {
+    createDocument = (filename: string, buffer: any, complete: () => any): void => {
         if (this.listTitle().length === 0) {
             return;
         }
 
-        this.service.createImage(filename,
+        this.service.createDocument(filename,
             buffer,
             (json: any) => {
                 if (json.TimeCreated === json.TimeLastModified) {
-                    // construct the new image
-                    let image = <Image>{
+                    // construct the new document
+                    let document = <Document>{
                         Id: json.ListItemAllFields.Id,
                         Url: _spPageContextInfo.webServerRelativeUrl + this.config.listTitle + "/" + filename,
                         Title: protectedObservable(""),
-                        Description: protectedObservable(""),
                         FileRef: _spPageContextInfo.webServerRelativeUrl +
                             this.config.listTitle + "/" + filename
                     };
+                    this.config.otherFields.forEach(field => document[field.name] = protectedObservable("") );                    
 
                     // push it to the array
-                    this.images.push(image);
+                    this.documents.push(document);
                 }
 
                 // tell the drop zone we're finished
@@ -149,24 +165,25 @@ export class ImageSliderViewModel implements Widget {
     }
 
     /*
-    Read all images from the source library and push them to the model.
+    Read all documents from the source library and push them to the model.
     */
-    readImages = (): void => {
+    readDocuments = (): void => {
         if (this.listTitle().length === 0) {
+            this.isInitialized(true);
             return;
         }
 
-        this.service.readImages(
+        this.service.readDocuments(
             (json: any) => {
                 let tmp: any[] = [];
                 for (let i = 0; i < json.length; i++) {
                     // get the current result
                     let current = json[i];
 
-                    // convert the result to an image model.
+                    // convert the result to an document model.
                     current.Url = ko.observable(current.FileRef);
                     current.Title = protectedObservable(current.Title);
-                    current.Description = protectedObservable(current.Description);
+                    this.config.otherFields.forEach(field => current[field.name] = protectedObservable(current[field.name]) );
 
                     // push it onto the array
                     tmp.push(current);
@@ -174,11 +191,11 @@ export class ImageSliderViewModel implements Widget {
                 if (tmp.length > 0) {
                     // reconstruct the observable array from scratch (faster than
                     // repeatedly pushing)
-                    this.images.valueWillMutate();
-                    ko.utils.arrayPushAll(this.images, tmp);
-                    this.images.valueHasMutated();
+                    this.documents.valueWillMutate();
+                    ko.utils.arrayPushAll(this.documents, tmp);
+                    this.documents.valueHasMutated();
 
-                    // select the first image
+                    // select the first document
                     this.selected(0);
                 }
                 this.isInitialized(true);
@@ -186,51 +203,54 @@ export class ImageSliderViewModel implements Widget {
     }
 
     /*
-    Update the title/description of the current image in the source library.
+    Update the title and other fields of the current document in the source library.
     */
-    updateImage = (commit: boolean): void => {
-        if (this.images().length === 0) {
+    updateDocument = (commit: boolean): void => {
+        if (this.documents().length === 0) {
             return;
         }
 
-        let current = this.images()[this.selected()];
+        let current = this.documents()[this.selected()];
         if (commit) {
+            let merge: any = { Title: current.Title() };
+            this.config.otherFields.forEach(field => merge[field.name] = current[field.name]() );
+
             // save to SharePoint
-            this.service.updateImage(current.Id,
-                { Title: current.Title(), Description: current.Description() },
+            this.service.updateDocument(current.Id,
+                merge,
                 (json: any) => {
                     // overwrite the reset state
                     current.Title.commit();
-                    current.Description.commit();
+                    this.config.otherFields.forEach(field => current[field.name].commit() );
                 });
         }
         else {
             // reset the observables
             current.Title.reset();
-            current.Description.reset();
+            this.config.otherFields.forEach(field => current[field.name].reset() );
         }
 
         this.toggleDialog(this.editDialog);
     }
 
     /*
-    Delete the currently displayed image from the source library and the model.
+    Delete the currently displayed document from the source library and the model.
     */
-    deleteImage = (): void => {
-        if (this.images().length === 0) {
+    deleteDocument = (): void => {
+        if (this.documents().length === 0) {
             return;
         }
 
         let index = this.selected();
-        this.service.deleteImage(
-            this.images()[index].FileRef, (json: any) => {
-                // get the previous image index
-                let newIndex = index > 0 ? index - 1 : this.images().length - 2;
+        this.service.deleteDocument(
+            this.documents()[index].FileRef, (json: any) => {
+                // get the previous document index
+                let newIndex = index > 0 ? index - 1 : this.documents().length - 2;
 
                 this.selected(-1);
 
                 // remove the deleted index from the model
-                let deleted = this.images.splice(index, 1);
+                let deleted = this.documents.splice(index, 1);
 
                // select the previous index
                this.selected(newIndex);
@@ -241,7 +261,7 @@ export class ImageSliderViewModel implements Widget {
     }
 
     /*
-    Select and image by 0 based index.
+    Select and document by 0 based index.
     */
     select = (index: number): void => {
         this.selected(index);
@@ -252,14 +272,17 @@ export class ImageSliderViewModel implements Widget {
     */
     settings = (commit: boolean): void => {
         if (commit) {
-            if (this.listTitle.hasChanged() || this.interval.hasChanged()) {
+            if (this.listTitle.hasChanged() || this.interval.hasChanged() || this.otherFields.hasChanged()) {
                 this.hasConfigChanged(true);
                 this.listTitle.commit();
                 this.interval.commit();
+                this.otherFields.commit();
             }
         }
         else {
             this.listTitle.reset();
+            this.interval.reset();
+            this.otherFields.reset();
         }
         this.editSettings(false);
     }
@@ -271,11 +294,12 @@ export class ImageSliderViewModel implements Widget {
     persistConfig = (): string => {
         this.config.listTitle = this.listTitle();
         this.config.interval = this.interval();
+        this.config.otherFields = JSON.parse(this.otherFields());
         return JSON.stringify(this.config);
     }
 
     /*
-    Stop scrolling images until not hovering.
+    Stop scrolling documents until not hovering.
     */
     mouseOver = (): void => {
         if (this.timerId > 0) {
@@ -285,12 +309,12 @@ export class ImageSliderViewModel implements Widget {
     }
 
     /*
-    Start scrolling images unless interval equals zero.
+    Start scrolling documents unless interval equals zero.
      */
     mouseOut = (): void => {
         if (this.timerId === 0 && this.config.interval > 0) {
             this.timerId = setInterval(() => {
-                if (this.selected() + 1 >= this.images().length) {
+                if (this.selected() + 1 >= this.documents().length) {
                     this.selected(0);
                 }
                 else {

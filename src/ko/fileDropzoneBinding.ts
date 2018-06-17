@@ -39,8 +39,8 @@ class FileDropzone {
                 e.cancelBubble = true;
                 if (e.stopPropagation) { e.stopPropagation(); }
                 if (e.preventDefault) { e.preventDefault(); }
-                if ((<HTMLElement>e.target).className.indexOf("dragover") < 0) {
-                    (<HTMLElement>e.target).className = (<HTMLElement>e.target).className + " dragover";
+                if ((<HTMLElement>e.target).className.indexOf("drag-over") < 0) {
+                    (<HTMLElement>e.target).className = (<HTMLElement>e.target).className + " drag-over";
                 }
             });
 
@@ -48,11 +48,11 @@ class FileDropzone {
                 e.cancelBubble = true;
                 if (e.stopPropagation) { e.stopPropagation(); }
                 if (e.preventDefault) { e.preventDefault(); }
-                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ dragover/g, "");
+                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ drag-over/g, "");
             });
 
             this.element.addEventListener("drop", (e: DragEvent) => {
-                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ dragover/g, "");
+                (<HTMLElement>e.target).className = (<HTMLElement>e.target).className.replace(/ drag-over/g, "");
                 if (e.preventDefault) { e.preventDefault(); }
                 let files = e.dataTransfer.files;
                 this.handleFileUpload(files);
@@ -93,7 +93,7 @@ class FileDropzone {
 
             if (this.uploading == 0) {
                 (<HTMLElement>this.element.querySelector(".draganddroplabel")).style.display = "none";
-                (<HTMLElement>this.element.querySelector(".draganddropbusy")).style.display = "block";
+                (<HTMLElement>this.element.querySelector(".drag-and-drop-busy")).style.display = "block";
             }
             this.uploading++;
 
@@ -101,7 +101,7 @@ class FileDropzone {
                 this.uploading--;
                 if (this.uploading === 0 && this.fileArray.length == 0) {
                     (<HTMLElement>this.element.querySelector(".draganddroplabel")).style.display = "block";
-                    (<HTMLElement>this.element.querySelector(".draganddropbusy")).style.display = "none";
+                    (<HTMLElement>this.element.querySelector(".drag-and-drop-busy")).style.display = "none";
                     if (this.config.completeCallback) {
                         this.config.completeCallback();
                     }

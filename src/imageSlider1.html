@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<!--
+    Export any web part from a SharePoint page - https://chuvash.eu/2014/09/19/export-any-web-part-from-a-sharepoint-page/ by Anatoly Mironov
+    -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Creating a CSS3 Slider</title>
+</head>
+
+<body>
+
+    <div data-bind="widgetSettings: hasConfigChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }" class="document-viewer-outer">
+        <div data-bind="visible: $root.hasDocuments()" class="slider">
+            <div data-bind="foreach: documents" class="slider-wrapper">
+                <div data-bind="slider: $root.selected() === $index()" class="slide">
+                    <img data-bind="attr: { src: Url, alt: Title }">
+                    <div data-bind="visible: Title" class="caption">
+                        <p data-bind="text: Title" class="caption"></p>
+                        <p data-bind="text: Description" class="description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="foreach: { data: documents }, visible: $root.hasDocuments()" class="slider-nav">
+            <a data-bind="click: $root.select($index()), css: { current: $index() === $root.selected() }" href="#"></a>
+        </div>
+    </div>
+    <script 
+        type="text/javascript" 
+        src="/Style Library/tkoWebPart/pnp-ww.js" 
+        ww-appname="ImageSlider" 
+        ww-appbind="tkoWebPart.libraryEditor.init" 
+        ww-appconfig='{"listTitle": "Pictures", "interval": 10000, "otherFields": [{"name": "Description", "displayName":"Description", "type":"Note" }]}' 
+        ww-appscripts='[{"src": "~/tkoWebPart.js", "priority ":0}]'>
+    </script>
+
+</body>
+
+</html>

@@ -24,7 +24,7 @@ export const widgetSettings = {
             let webPart = document.getElementById(widget.webPartId);
             let anchor = <HTMLElement>webPart.querySelector("a[title='Edit Snippet']");
             if (anchor) {
-                anchor.style.display = "none";
+                //anchor.style.display = "none";
             }
         }
     },

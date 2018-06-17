@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<!--
+    Export any web part from a SharePoint page - https://chuvash.eu/2014/09/19/export-any-web-part-from-a-sharepoint-page/ by Anatoly Mironov
+    -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Creating a CSS3 Slider</title>
+</head>
+
+<body>
+
+    <div data-bind="widgetSettings: hasConfigChanged(), event: { mouseover: mouseOver, mouseout: mouseOut }" class="document-viewer-outer">
+        <div data-bind="visible: $root.hasDocuments()" class="slider">
+            <div data-bind="foreach: documents" class="slider-wrapper">
+                <div data-bind="slider: $root.selected() === $index()" class="slide">
+                    <img data-bind="attr: { src: Url, alt: Title }">
+                    <div data-bind="visible: Title" class="caption">
+                        <p data-bind="text: Title" class="caption"></p>
+                        <p data-bind="text: Description" class="description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="foreach: { data: documents }, visible: $root.hasDocuments()" class="slider-nav">
+            <a data-bind="click: $root.select($index()), css: { current: $index() === $root.selected() }" href="#"></a>
+        </div>
+        <div  class="button-bar" style="display:none"
+            data-bind="visible: $root.isInitialized() && ($root.isInEditMode() || $root.hasDocuments() || $root.hasList())">
+            <div title="Add" class="button button-large add"
+                data-bind='click: toggleDialog.bind($root, addDialog), visible: $root.hasDocuments() || $root.hasList()' ></div>
+        </div>
+        <div data-bind="visible: $root.isInitialized() || ($root.isInEditMode() || $root.hasList())" class="dialogs" style="display:none">
+            <div data-bind='toggleDialog: addDialog()' class="add-document modalDialog">
+                <div class="modalDialog-inner">
+                    <a data-bind='click: toggleDialog.bind($root, addDialog)' href="#" title="Close" class="close">X</a>
+                    <div data-bind='fileDropzone: { processFile: $root.createDocument, complete: $root.uploadComplete }' class="drag-and-drop-handler">
+                        <div class="drag-and-drop-busy" style="display:none">
+                            &nbsp;
+                        </div>
+                        <div class="draganddroplabel">Drag & Drop Images Here...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script 
+        type="text/javascript" 
+        src="/Style Library/tkoWebPart/pnp-ww.js" 
+        ww-appname="ImageSlider" 
+        ww-appbind="tkoWebPart.libraryEditor.init"
+        ww-appconfig='{"listTitle": "Pictures", "interval": 10000, "otherFields": [{"name": "Description", "displayName":"Description", "type":"Note" }]}'
+        ww-appscripts='[{"src": "~/tkoWebPart.js", "priority ":0}]'>
+    </script>
+    
+</body>
+
+</html>
