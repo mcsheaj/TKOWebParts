@@ -12,8 +12,8 @@
         background-color: rgba(11, 133, 161, .1);
         margin-top: 20px;
 
-        &.drag-and-drop-handler.drag-over {
-            border: 2px solid rgba(11, 133, 161, 1);
+        &.drag-over {
+            border: 2px dashed rgba(11, 133, 161, 1);
             background-color: rgba(11, 133, 161, .3);
         }
 

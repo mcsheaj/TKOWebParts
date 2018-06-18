@@ -45,7 +45,7 @@
                         &lt;div class="drag-and-drop-busy" style="display:none"&gt;
                             &amp;nbsp;
                         &lt;/div&gt;
-                        &lt;div class="draganddroplabel"&gt;Drag &amp;amp; Drop Images Here...&lt;/div&gt;
+                        &lt;div class="drag-and-drop-label"&gt;Drag &amp;amp; Drop Images Here...&lt;/div&gt;
                     &lt;/div&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
