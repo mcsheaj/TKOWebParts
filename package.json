@@ -11,7 +11,7 @@
   "author": "Joe McShea",
   "license": "MIT",
   "devDependencies": {
-    "@types/knockout": "3.4.54",
+    "@types/knockout": "3.4.57",
     "@types/sharepoint": "2016.1.1",
     "awesome-typescript-loader": "5.0.0",
     "css-loader": "0.28.11",
@@ -29,7 +29,7 @@
     "webpack-cli": "3.0.8"
   },
   "dependencies": {
-    "cross-fetch": "2.2.1",
+    "cross-fetch": "2.2.2",
     "es6-promise": "4.2.4",
     "knockout": "3.4.2"
   }
